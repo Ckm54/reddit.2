@@ -1,6 +1,7 @@
 import { authModalState } from "@/atoms/authModalAtom";
 import {
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,24 +15,44 @@ import React from "react";
 import { useRecoilState } from "recoil";
 
 const AuthModal: React.FC = () => {
-
-  const [ modalState, setModalState ] = useRecoilState(authModalState);
+  const [modalState, setModalState] = useRecoilState(authModalState);
 
   const handleClose = () => {
     setModalState((prev) => ({
       ...prev,
       open: false,
-    }))
-  }
+    }));
+  };
 
   return (
     <>
       <Modal isOpen={modalState.open} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>
+            {modalState.view === "login" && "Login"}
+            {modalState.view === "signup" && "Sign Up"}
+            {modalState.view === "resetPassword" && "Reset Password"}
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>odal body here</ModalBody>
+          <ModalBody
+            display={"flex"}
+            flexDirection="column"
+            alignItems={"center"}
+            justifyContent="center"
+          >
+            <Flex
+              direction={"column"}
+              align="center"
+              justify={"center"}
+              width="70%"
+              border={"1px solid red"}
+            >
+              {/* <OAuthButtons /> */}
+              {/* <AuthInputs /> */}
+              {/* <ResetPassword /> */}
+            </Flex>
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
