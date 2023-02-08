@@ -14,7 +14,9 @@ const Login = (props: Props) => {
   });
 
   // handle firebase logic
-  const onSubmit = () => {};
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //update form state
@@ -25,7 +27,7 @@ const Login = (props: Props) => {
   };
 
   return (
-    <form onSubmit={onsubmit}>
+    <form onSubmit={onSubmit}>
       <Input
         name="email"
         required
