@@ -70,6 +70,7 @@ const Signup = () => {
         required
         placeholder="password"
         type={"password"}
+        mb={2}
         onChange={onChange}
         fontSize="10pt"
         _placeholder={{ color: "gray.500" }}

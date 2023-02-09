@@ -18,10 +18,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
 import AuthInputs from "./AuthInputs";
 import OauthButtons from "./OauthButtons";
+import ResetPassword from "./ResetPassword";
 
 const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
-  const [ user, loading, error ] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
 
   const handleClose = () => {
     setModalState((prev) => ({
@@ -31,17 +32,16 @@ const AuthModal: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if(user) handleClose();
+    if (user) handleClose();
     console.log(user);
-  }, [user])
-  
+  }, [user]);
 
   return (
     <>
       <Modal isOpen={modalState.open} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign={'center'}>
+          <ModalHeader textAlign={"center"}>
             {modalState.view === "login" && "Login"}
             {modalState.view === "signup" && "Sign Up"}
             {modalState.view === "resetPassword" && "Reset Password"}
@@ -60,9 +60,18 @@ const AuthModal: React.FC = () => {
               justify={"center"}
               width="70%"
             >
-              <OauthButtons />
-              <Text color={'gray.400'} fontWeight={700}>OR</Text>
-              <AuthInputs />
+              {modalState.view === "login" || modalState.view === "signup" ? (
+                <React.Fragment>
+                  <OauthButtons />
+                  <Text color={"gray.400"} fontWeight={700}>
+                    OR
+                  </Text>
+                  <AuthInputs />
+                </React.Fragment>
+              ) : (
+                <ResetPassword />
+              )}
+
               {/* <ResetPassword /> */}
             </Flex>
           </ModalBody>
