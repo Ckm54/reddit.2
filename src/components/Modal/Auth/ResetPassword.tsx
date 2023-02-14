@@ -68,7 +68,7 @@ const ResetPassword = () => {
               bg="gray.50"
             />
 
-            {resetError && <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={4}>
+            {resetError && <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={2}>
               Email address not found!
             </Text>}
 
