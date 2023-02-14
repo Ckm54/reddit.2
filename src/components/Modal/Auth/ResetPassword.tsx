@@ -5,10 +5,12 @@ import { BsDot, BsReddit } from "react-icons/bs";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import { auth } from "@/firebase/clientApp";
+import { FIREBASE_ERRORS } from "@/firebase/errors";
 
 const ResetPassword = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const [email, setEmail] = React.useState("");
+  const [resetError, setResetError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [sendPasswordResetEmail, sending, error] =
     useSendPasswordResetEmail(auth);
@@ -16,8 +18,12 @@ const ResetPassword = () => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await sendPasswordResetEmail(email);
-    setSuccess(true);
+    const response = await sendPasswordResetEmail(email);
+    if (response) {
+      setSuccess(true);
+    } else {
+      setResetError(true);
+    }
   };
 
   return (
@@ -43,7 +49,9 @@ const ResetPassword = () => {
               placeholder="email"
               type={"email"}
               mb={2}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(event.target.value)
+              }
               fontSize="10pt"
               _placeholder={{ color: "gray.500" }}
               _hover={{
@@ -59,11 +67,16 @@ const ResetPassword = () => {
               }}
               bg="gray.50"
             />
+
+            {resetError && <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={4}>
+              Email address not found!
+            </Text>}
+
             <Button
-              width='100%'
-              height={'36px'}
+              width="100%"
+              height={"36px"}
               my={2}
-              type='submit'
+              type="submit"
               isLoading={sending}
             >
               Reset Password
@@ -73,26 +86,30 @@ const ResetPassword = () => {
       )}
 
       <Flex
-        alignItems={'center'}
-        fontSize='9pt'
-        color={'blue.500'}
+        alignItems={"center"}
+        fontSize="9pt"
+        color={"blue.500"}
         fontWeight={700}
-        cursor='pointer'
+        cursor="pointer"
       >
         <Text
-          onClick={() => setAuthModalState((prev) => ({
-            ...prev,
-            view: 'login'
-          }))}
+          onClick={() =>
+            setAuthModalState((prev) => ({
+              ...prev,
+              view: "login",
+            }))
+          }
         >
           LOGIN
         </Text>
         <Icon as={BsDot} />
         <Text
-          onClick={() => setAuthModalState((prev) => ({
-            ...prev,
-            view: 'signup'
-          }))}
+          onClick={() =>
+            setAuthModalState((prev) => ({
+              ...prev,
+              view: "signup",
+            }))
+          }
         >
           SIGN UP
         </Text>
