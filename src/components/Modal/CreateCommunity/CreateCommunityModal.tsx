@@ -21,7 +21,7 @@ import { firestore } from "@/firebase/clientApp";
 import React from "react";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
 
@@ -64,22 +64,33 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
      // check name is not taken
     // if valid --- create the community document in firestore
     const communityDocumentReference = doc(firestore, 'communities', communityName);
-    const communityDoc = await getDoc(communityDocumentReference);
 
-    if(communityDoc.exists()) {
-      throw new Error(`Sorry, r/${communityName} is taken. Try another.`);
-    }
+    await runTransaction(firestore, async (transaction) => {
+      const communityDoc = await transaction.get(communityDocumentReference);
+  
+      if(communityDoc.exists()) {
+        throw new Error(`Sorry, r/${communityName} is taken. Try another.`);
+      }
 
-    await setDoc(communityDocumentReference, {
-      creatorId: user?.uid,
-      createdAt: serverTimestamp(),
-      numberOfMembers: 1,
-      privacyType: communityType,
-      // creator id
-      // createdAt
-      // numberOfMembers
-      // Privacy type
-    });
+      transaction.set(communityDocumentReference, {
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityType,
+        // creator id
+        // createdAt
+        // numberOfMembers
+        // Privacy type
+      });
+
+      // create community snippet on user
+      transaction.set(doc(firestore, `users/${user?.uid}/communitySnippets`, communityName), {
+        communityId: communityName,
+        isModerator: true,
+      })
+    })
+
+
    } catch (error: any) {
     console.log('handleCreateCommunity error', error);
     setError(error.message)
