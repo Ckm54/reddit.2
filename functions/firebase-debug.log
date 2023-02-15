@@ -1,0 +1,25 @@
+[debug] [2023-02-15T07:45:57.455Z] ----------------------------------------------------------------------
+[debug] [2023-02-15T07:45:57.457Z] Command:       /home/collo/.nvm/versions/node/v18.13.0/bin/node /home/collo/.nvm/versions/node/v18.13.0/bin/firebase deploy --only functions
+[debug] [2023-02-15T07:45:57.457Z] CLI Version:   11.23.1
+[debug] [2023-02-15T07:45:57.457Z] Platform:      linux
+[debug] [2023-02-15T07:45:57.457Z] Node Version:  v18.13.0
+[debug] [2023-02-15T07:45:57.458Z] Time:          Wed Feb 15 2023 10:45:57 GMT+0300 (East Africa Time)
+[debug] [2023-02-15T07:45:57.458Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-02-15T07:45:57.536Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-02-15T07:45:57.537Z] > authorizing via signed-in user (mutaic84@gmail.com)
+[debug] [2023-02-15T07:45:57.537Z] [iam] checking project reddit-clone-14c68 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-02-15T07:45:57.539Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/reddit-clone-14c68:testIamPermissions [none]
+[debug] [2023-02-15T07:45:57.539Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/reddit-clone-14c68:testIamPermissions x-goog-quota-user=projects/reddit-clone-14c68
+[debug] [2023-02-15T07:45:57.540Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/reddit-clone-14c68:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-02-15T07:45:59.393Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/reddit-clone-14c68:testIamPermissions 200
+[debug] [2023-02-15T07:45:59.393Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/reddit-clone-14c68:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-02-15T07:45:59.395Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/reddit-clone-14c68/serviceAccounts/reddit-clone-14c68@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-02-15T07:45:59.395Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/reddit-clone-14c68/serviceAccounts/reddit-clone-14c68@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-02-15T07:46:01.092Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/reddit-clone-14c68/serviceAccounts/reddit-clone-14c68@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-02-15T07:46:01.093Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/reddit-clone-14c68/serviceAccounts/reddit-clone-14c68@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'reddit-clone-14c68'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
