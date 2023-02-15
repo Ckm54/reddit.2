@@ -3,12 +3,15 @@ import { Box, Button, Flex, Icon, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { FaReddit } from "react-icons/fa";
 import useCommunityData from "@/hooks/useCommunityData";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/firebase/clientApp";
 
 type HeaderProps = {
   communityData: Community;
 };
 
 const Header = ({ communityData }: HeaderProps) => {
+  const [user] = useAuthState(auth);
   const { communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
 
   const isJoined = !!communityStateValue.mySnippets.find(item => item.communityId === communityData.id);
@@ -42,12 +45,12 @@ const Header = ({ communityData }: HeaderProps) => {
               </Text>
             </Flex>
             <Button
-              variant={isJoined ? "outline" : "solid"}
+              variant={user && isJoined ? "outline" : "solid"}
               height="30px"
               px={6}
               onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
             >
-              {isJoined ? "Joined" : "Join"}
+              {user && isJoined ? "Joined" : "Join"}
             </Button>
           </Flex>
         </Flex>
