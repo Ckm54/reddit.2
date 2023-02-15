@@ -12,7 +12,7 @@ type HeaderProps = {
 
 const Header = ({ communityData }: HeaderProps) => {
   const [user] = useAuthState(auth);
-  const { communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
+  const { loading, communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
 
   const isJoined = !!communityStateValue.mySnippets.find(item => item.communityId === communityData.id);
 
@@ -45,12 +45,13 @@ const Header = ({ communityData }: HeaderProps) => {
               </Text>
             </Flex>
             <Button
-              variant={user && isJoined ? "outline" : "solid"}
+              variant={isJoined ? "outline" : "solid"}
               height="30px"
               px={6}
+              isLoading={loading}
               onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
             >
-              {user && isJoined ? "Joined" : "Join"}
+              {isJoined ? "Joined" : "Join"}
             </Button>
           </Flex>
         </Flex>
