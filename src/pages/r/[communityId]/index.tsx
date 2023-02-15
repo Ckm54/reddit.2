@@ -1,4 +1,5 @@
 import { Community } from "@/atoms/communityAtom";
+import Header from "@/components/Community/Header";
 import CommunityNotFound from "@/components/Community/NotFound";
 import { firestore } from "@/firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
@@ -14,8 +15,12 @@ const CommunityPage = ({ communityData }: CommunityPageProps) => {
   if (!communityData) {
     return <CommunityNotFound />;
   }
-  
-  return <div>Welcome to {communityData.id}</div>;
+
+  return (
+    <>
+      <Header communityData={communityData} />
+    </>
+  );
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
