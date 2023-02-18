@@ -1,4 +1,5 @@
 import { Community } from "@/atoms/communityAtom";
+import CreatePostLink from "@/components/Community/CreatePostLink";
 import Header from "@/components/Community/Header";
 import CommunityNotFound from "@/components/Community/NotFound";
 import PageContent from "@/components/Layout/PageContent";
@@ -22,7 +23,7 @@ const CommunityPage = ({ communityData }: CommunityPageProps) => {
       <Header communityData={communityData} />
       <PageContent>
         <>
-          <div>Left hand side</div>
+          <CreatePostLink />
         </>
         <>
           <div>Right hand side</div>
