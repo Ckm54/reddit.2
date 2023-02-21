@@ -4,6 +4,7 @@ import { IconType } from 'react-icons';
 import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs'
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5'
+import TextInputs from './PostForm/TextInputs';
 import TabItemTitle from './TabItem';
 
 type NewPostFormProps = {}
@@ -37,7 +38,18 @@ const formTabs: TabItem[] = [
 ]
 
 const NewPostForm = (props: NewPostFormProps) => {
-  const[selectedTab, setSelectedTab] = React.useState(formTabs[0].title)
+  const[selectedTab, setSelectedTab] = React.useState(formTabs[0].title);
+  const[textInputs, setTextInputs] = React.useState({
+    title: "",
+    body: "",
+  });
+  const[selectedFile, setSelectedFile] = React.useState<string>();
+
+  const handleCreatePost = async() => {}
+
+  const onSelectImage = () => {}
+
+  const onTextChange = () => {}
   return (
     <Flex direction={'column'}borderRadius={4} mt={2} bg='white'>
       <Flex width={'100%'}>
@@ -46,6 +58,10 @@ const NewPostForm = (props: NewPostFormProps) => {
             <TabItemTitle key={index} item={item} selected={item.title === selectedTab} setSelectedTab={setSelectedTab}/>
           ))
         }
+      </Flex>
+
+      <Flex p={4}>
+        <TextInputs />
       </Flex>
     </Flex>
   )
