@@ -1,4 +1,16 @@
+import { Post } from "@/atoms/PostAtom";
+import { firestore, storage } from "@/firebase/clientApp";
 import { Flex, Icon } from "@chakra-ui/react";
+import { User } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { useRouter } from "next/router";
 import React from "react";
 import { IconType } from "react-icons";
 import { BiPoll } from "react-icons/bi";
@@ -8,7 +20,9 @@ import ImageUpload from "./PostForm/ImageUpload";
 import TextInputs from "./PostForm/TextInputs";
 import TabItemTitle from "./TabItem";
 
-type NewPostFormProps = {};
+type NewPostFormProps = {
+  user: User;
+};
 
 export interface TabItem {
   title: string;
@@ -38,7 +52,9 @@ const formTabs: TabItem[] = [
   },
 ];
 
-const NewPostForm = (props: NewPostFormProps) => {
+const NewPostForm = ({ user }: NewPostFormProps) => {
+  const router = useRouter();
+
   const [selectedTab, setSelectedTab] = React.useState(formTabs[0].title);
   const [textInputs, setTextInputs] = React.useState({
     title: "",
@@ -48,15 +64,41 @@ const NewPostForm = (props: NewPostFormProps) => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const handleCreatePost = async () => {
+    const { communityId } = router.query;
+
+    setLoading(true);
     // create new post object as type post
+    const newPost: Post = {
+      communityId: communityId as string,
+      creatorId: user.uid,
+      creatorDisplayName: user.email!.split("@")[0],
+      title: textInputs.title,
+      body: textInputs.body,
+      numberOfComments: 0,
+      voteStatus: 0,
+      createaAt: serverTimestamp() as Timestamp,
+    };
 
     // store post in database
+    try {
+      const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
+      // check if there is an image & store in firebase storage
 
-    // check if there is an image & store in firebase storage
-
-    // update post document by adding image url
-
+      if (selectedFile) {
+        const imageRef = ref(storage, `post/${postDocRef.id}/image`);
+        await uploadString(imageRef, selectedFile, "data_url");
+        // update post document by adding image url
+        const downloadURL = getDownloadURL(imageRef);
+        await updateDoc(postDocRef, {
+          imageURL: downloadURL,
+        });
+      }
+    } catch (error: any) {
+      console.log("handleCreatePostError", error.message);
+    }
+    setLoading(false);
     // redirect user back to community page
+    // router.back();
   };
 
   const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
