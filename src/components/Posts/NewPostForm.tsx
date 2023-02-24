@@ -47,7 +47,17 @@ const NewPostForm = (props: NewPostFormProps) => {
   const [selectedFile, setSelectedFile] = React.useState<string>();
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const handleCreatePost = async () => {};
+  const handleCreatePost = async () => {
+    // create new post object as type post
+
+    // store post in database
+
+    // check if there is an image & store in firebase storage
+
+    // update post document by adding image url
+
+    // redirect user back to community page
+  };
 
   const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
