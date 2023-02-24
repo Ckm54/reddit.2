@@ -1,6 +1,16 @@
 import { Post } from "@/atoms/PostAtom";
 import { firestore, storage } from "@/firebase/clientApp";
-import { Flex, Icon } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  CloseButton,
+  Flex,
+  Icon,
+  Text,
+} from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import {
   addDoc,
@@ -62,6 +72,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
   });
   const [selectedFile, setSelectedFile] = React.useState<string>();
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<boolean>(true);
 
   const handleCreatePost = async () => {
     const { communityId } = router.query;
@@ -95,6 +106,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       }
     } catch (error: any) {
       console.log("handleCreatePostError", error.message);
+      setError(true);
     }
     setLoading(false);
     // redirect user back to community page
@@ -156,6 +168,12 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
           />
         )}
       </Flex>
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          <Text mt={2}>Error creating post</Text>
+        </Alert>
+      )}
     </Flex>
   );
 };
