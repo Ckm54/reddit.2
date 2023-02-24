@@ -6,12 +6,19 @@ type TextInputsProps = {
     title: string;
     body: string;
   };
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   handleCreatePost: () => void;
   loading: boolean;
 };
 
-const TextInputs = ({textInputs, onChange, handleCreatePost, loading}: TextInputsProps) => {
+const TextInputs = ({
+  textInputs,
+  onChange,
+  handleCreatePost,
+  loading,
+}: TextInputsProps) => {
   return (
     <Stack spacing={3} width="100%">
       <Input
@@ -35,7 +42,7 @@ const TextInputs = ({textInputs, onChange, handleCreatePost, loading}: TextInput
         value={textInputs.body}
         fontSize="10pt"
         borderRadius={4}
-        placeholder="Title"
+        placeholder="Text(optional)"
         height="100px"
         _placeholder={{ color: "gray.500" }}
         _focus={{
