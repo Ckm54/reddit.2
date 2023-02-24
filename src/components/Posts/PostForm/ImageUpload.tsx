@@ -17,13 +17,13 @@ const ImageUpload = ({
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Flex justify={"center"} align="center" width="100%">
+    <Flex direction={'column'} justify={"center"} align="center" width="100%">
       {selectedFile ? (
         <>
           <Image
             src={selectedFile}
-            maxWidth="400px"
-            maxHeight="100px"
+            width="400px"
+            height="z00px"
             alt="Uploaded image"
           />
           <Stack direction={"row"} mt={4}>
@@ -32,7 +32,7 @@ const ImageUpload = ({
             </Button>
             <Button
               variant={"outline"}
-              height="20px"
+              height="28px"
               onClick={() => setSelectedFile("")}
             >
               Remove
