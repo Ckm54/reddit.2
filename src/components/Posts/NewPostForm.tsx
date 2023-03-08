@@ -87,7 +87,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       body: textInputs.body,
       numberOfComments: 0,
       voteStatus: 0,
-      createaAt: serverTimestamp() as Timestamp,
+      createdAt: serverTimestamp() as Timestamp,
     };
 
     // store post in database
@@ -99,7 +99,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
         const imageRef = ref(storage, `post/${postDocRef.id}/image`);
         await uploadString(imageRef, selectedFile, "data_url");
         // update post document by adding image url
-        const downloadURL = getDownloadURL(imageRef);
+        const downloadURL = await getDownloadURL(imageRef);
         await updateDoc(postDocRef, {
           imageURL: downloadURL,
         });
