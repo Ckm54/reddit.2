@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 const usePosts = () => {
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
 
-  const onVote = () => {};
+  const onVote = async () => {};
 
   const onSelectPost = () => {};
 
@@ -14,6 +14,9 @@ const usePosts = () => {
   return {
     postStateValue,
     setPostStateValue,
+    onVote,
+    onSelectPost,
+    onDeletePost,
   };
 };
 
