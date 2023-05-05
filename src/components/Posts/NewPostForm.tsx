@@ -1,16 +1,7 @@
 import { Post } from "@/atoms/PostAtom";
 import { firestore, storage } from "@/firebase/clientApp";
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  CloseButton,
-  Flex,
-  Icon,
-  Text,
-} from "@chakra-ui/react";
+import useSelectFile from "@/hooks/useSelectFile";
+import { Alert, AlertIcon, Flex, Icon, Text } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import {
   addDoc,
@@ -22,7 +13,6 @@ import {
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { useRouter } from "next/router";
 import React from "react";
-import { IconType } from "react-icons";
 import { BiPoll } from "react-icons/bi";
 import { BsLink45Deg, BsMic } from "react-icons/bs";
 import { IoDocumentText, IoImageOutline } from "react-icons/io5";
@@ -70,9 +60,10 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     title: "",
     body: "",
   });
-  const [selectedFile, setSelectedFile] = React.useState<string>();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<boolean>(false);
+
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
 
   const handleCreatePost = async () => {
     const { communityId } = router.query;
@@ -113,19 +104,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     setLoading(false);
   };
 
-  const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    if (event.target.files?.[0]) {
-      reader.readAsDataURL(event.target.files[0]);
-    }
-
-    reader.onload = (readerEvent) => {
-      if (readerEvent.target?.result) {
-        setSelectedFile(readerEvent.target.result as string);
-      }
-    };
-  };
-
   const onTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -162,7 +140,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
         {selectedTab === "Images & Video" && (
           <ImageUpload
             selectedFile={selectedFile}
-            onSelectImage={onSelectImage}
+            onSelectImage={onSelectFile}
             setSelectedFile={setSelectedFile}
             setSelectedTab={setSelectedTab}
           />
