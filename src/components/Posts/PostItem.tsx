@@ -1,5 +1,5 @@
 import { Post } from "@/atoms/PostAtom";
-import { Flex, Icon, Image, Stack, Text } from "@chakra-ui/react";
+import { Flex, Icon, Image, Skeleton, Stack, Text } from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -9,7 +9,6 @@ import {
   IoArrowDownCircleOutline,
   IoArrowDownCircleSharp,
   IoArrowRedoOutline,
-  IoArrowUpCircle,
   IoArrowUpCircleOutline,
   IoArrowUpCircleSharp,
   IoBookmarkOutline,
@@ -32,6 +31,8 @@ const PostItem = ({
   onDeletePost,
   onSelectPost,
 }: PostItemProps) => {
+  const [loadingImage, setLoadingImage] = React.useState(true);
+
   return (
     <Flex
       border={"1px solid"}
@@ -93,10 +94,15 @@ const PostItem = ({
           <Text fontSize={"10pt"}>{post.body}</Text>
           {post.imageURL && (
             <Flex justify={"center"} align="center" p={2}>
+              {loadingImage && (
+                <Skeleton height={"200px"} width="100%" borderRadius={4} />
+              )}
               <Image
                 src={post.imageURL}
                 maxHeight={"460px"}
                 alt={`${post.title} image`}
+                display={loadingImage ? "none" : "unset"}
+                onLoad={() => setLoadingImage(false)}
               />
             </Flex>
           )}
