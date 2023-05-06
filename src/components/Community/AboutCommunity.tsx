@@ -22,7 +22,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { FaReddit } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { RiCakeLine } from "react-icons/ri";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 type Props = {
   communityData: Community;
@@ -33,7 +33,8 @@ const AboutCommunity = ({ communityData }: Props) => {
   const selectedFileRef = React.useRef<HTMLInputElement>(null);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const [uploadingImage, setUploadingImage] = React.useState(false);
-  const setCommunityStateValue = useSetRecoilState(communityState);
+  const [communityStateValue, setCommunityStateValue] =
+    useRecoilState(communityState);
 
   const onUpdateImage = async () => {
     if (!selectedFile) return;
@@ -59,6 +60,7 @@ const AboutCommunity = ({ communityData }: Props) => {
     } catch (error) {
       console.log("onUpdateImageError", error);
     }
+    setSelectedFile(undefined);
     setUploadingImage(false);
   };
 
@@ -133,7 +135,9 @@ const AboutCommunity = ({ communityData }: Props) => {
                   >
                     Change Image
                   </Text>
-                  {communityData.imageURL || selectedFile ? (
+                  {communityData.imageURL ||
+                  selectedFile ||
+                  communityStateValue.currentCommunity?.imageURL ? (
                     <Image
                       src={selectedFile || communityData.imageURL}
                       borderRadius="full"
@@ -153,7 +157,13 @@ const AboutCommunity = ({ communityData }: Props) => {
                   (uploadingImage ? (
                     <Spinner />
                   ) : (
-                    <Text onClick={onUpdateImage}>Save Changes</Text>
+                    <Text
+                      onClick={onUpdateImage}
+                      cursor="pointer"
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      Save Changes
+                    </Text>
                   ))}
                 <input
                   id="file-upload"
