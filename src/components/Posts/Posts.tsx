@@ -24,34 +24,38 @@ const Posts = ({ communityData }: Props) => {
     onDeletePost,
     onSelectPost,
   } = usePosts();
-  const getPosts = async () => {
-    try {
-      setLoading(true);
-      // get posts for this community
-      const postsQuery = query(
-        collection(firestore, "posts"),
-        where("communityId", "==", communityData.id),
-        orderBy("createdAt", "desc")
-      );
-
-      const postDocs = await getDocs(postsQuery);
-
-      // extract posts from postDocs
-      const posts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: posts as Post[],
-      }));
-    } catch (error: any) {
-      console.log("Get posts error: ", error.message);
-    }
-    setLoading(false);
-  };
 
   React.useEffect(() => {
+    const getPosts = async () => {
+      try {
+        setLoading(true);
+        // get posts for this community
+        const postsQuery = query(
+          collection(firestore, "posts"),
+          where("communityId", "==", communityData.id),
+          orderBy("createdAt", "desc")
+        );
+
+        const postDocs = await getDocs(postsQuery);
+
+        // extract posts from postDocs
+        const posts = postDocs.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setPostStateValue((prev) => ({
+          ...prev,
+          posts: posts as Post[],
+        }));
+      } catch (error: any) {
+        console.log("Get posts error: ", error.message);
+      }
+      setLoading(false);
+    };
+
     getPosts();
-  }, []);
+  }, [communityData.id, setPostStateValue]);
 
   return (
     <>
