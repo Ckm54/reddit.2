@@ -30,13 +30,12 @@ const UserMenu = ({ user }: MenuProps) => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const resetCommunityState = useResetRecoilState(communityState);
 
-  const logout = async() => {
-
+  const logout = async () => {
     await signOut(auth);
 
     // clear community state
-    resetCommunityState();
-  }
+    // resetCommunityState();
+  };
 
   return (
     <Menu>
@@ -56,13 +55,19 @@ const UserMenu = ({ user }: MenuProps) => {
                   color="gray.300"
                   as={FaRedditSquare}
                 />
-                <Flex direction={'column'} display={{base: 'none', lg: 'flex'}} fontSize='8pt' align={'flex-start'} mr={8}>
+                <Flex
+                  direction={"column"}
+                  display={{ base: "none", lg: "flex" }}
+                  fontSize="8pt"
+                  align={"flex-start"}
+                  mr={8}
+                >
                   <Text fontWeight={700}>
                     {user.displayName || user.email?.split("@")[0]}
                   </Text>
                   <Flex>
-                    <Icon as={IoSparkles} color={'brand.100'} mr={1} />
-                    <Text color={'gray.400'}>1 karma</Text>
+                    <Icon as={IoSparkles} color={"brand.100"} mr={1} />
+                    <Text color={"gray.400"}>1 karma</Text>
                   </Flex>
                 </Flex>
               </>
@@ -76,42 +81,42 @@ const UserMenu = ({ user }: MenuProps) => {
       <MenuList>
         {user ? (
           <>
-          <MenuItem
-          fontSize={"10pt"}
-          fontWeight={700}
-          _hover={{ background: "blue.500", color: "white" }}
-        >
-          <Flex align={"center"}>
-            <Icon fontSize={20} mr={2} as={CgProfile} />
-            Profile
-          </Flex>
-        </MenuItem>
-        <MenuDivider />
-        <MenuItem
-          fontSize={"10pt"}
-          fontWeight={700}
-          _hover={{ background: "blue.500", color: "white" }}
-          onClick={logout}
-        >
-          <Flex align={"center"}>
-            <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
-            Logout
-          </Flex>
-        </MenuItem>
+            <MenuItem
+              fontSize={"10pt"}
+              fontWeight={700}
+              _hover={{ background: "blue.500", color: "white" }}
+            >
+              <Flex align={"center"}>
+                <Icon fontSize={20} mr={2} as={CgProfile} />
+                Profile
+              </Flex>
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem
+              fontSize={"10pt"}
+              fontWeight={700}
+              _hover={{ background: "blue.500", color: "white" }}
+              onClick={logout}
+            >
+              <Flex align={"center"}>
+                <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
+                Logout
+              </Flex>
+            </MenuItem>
           </>
         ) : (
           <>
-        <MenuItem
-          fontSize={"10pt"}
-          fontWeight={700}
-          _hover={{ background: "blue.500", color: "white" }}
-          onClick={() => setAuthModalState({open: true, view: 'login'})}
-        >
-          <Flex align={"center"}>
-            <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
-            Log In / Sign Up
-          </Flex>
-        </MenuItem>
+            <MenuItem
+              fontSize={"10pt"}
+              fontWeight={700}
+              _hover={{ background: "blue.500", color: "white" }}
+              onClick={() => setAuthModalState({ open: true, view: "login" })}
+            >
+              <Flex align={"center"}>
+                <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
+                Log In / Sign Up
+              </Flex>
+            </MenuItem>
           </>
         )}
       </MenuList>

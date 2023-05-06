@@ -155,30 +155,40 @@ const usePosts = () => {
     }
   };
 
+  const getCommunityPostVotes = async (communityId: string) => {
+    const postVotesQuery = query(
+      collection(firestore, "users", `${user?.uid}/postVotes`),
+      where("communityId", "==", communityId)
+    );
+
+    const postVoteDocs = await getDocs(postVotesQuery);
+
+    const postVotes = postVoteDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setPostStateValue((prev) => ({
+      ...prev,
+      postVotes: postVotes as PostVote[],
+    }));
+  };
+
   React.useEffect(() => {
     if (!user || !currentCommunity?.id) return;
 
-    const getCommunityPostVotes = async (communityId: string) => {
-      const postVotesQuery = query(
-        collection(firestore, "users", `${user.uid}/postVotes`),
-        where("communityId", "==", communityId)
-      );
+    getCommunityPostVotes(currentCommunity.id);
+  }, [currentCommunity, user]);
 
-      const postVoteDocs = await getDocs(postVotesQuery);
-
-      const postVotes = postVoteDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
+  React.useEffect(() => {
+    if (!user) {
+      // clear user post votes
       setPostStateValue((prev) => ({
         ...prev,
-        postVotes: postVotes as PostVote[],
+        postVotes: [],
       }));
-    };
-
-    getCommunityPostVotes(currentCommunity.id);
-  }, [currentCommunity, setPostStateValue, user]);
+    }
+  }, [user]);
 
   return {
     postStateValue,
