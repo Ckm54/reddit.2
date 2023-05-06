@@ -25,7 +25,14 @@ const usePosts = () => {
 
   const router = useRouter();
 
-  const onVote = async (post: Post, vote: number, communityId: string) => {
+  const onVote = async (
+    event: React.MouseEvent<SVGElement, MouseEvent>,
+    post: Post,
+    vote: number,
+    communityId: string
+  ) => {
+    // prevent routing when clicking to vote
+    event.stopPropagation();
     //Check if user is unauthenticated then open auth modal
 
     if (!user?.uid) {
@@ -117,6 +124,13 @@ const usePosts = () => {
         }
       }
 
+      if (postStateValue.selectedPost) {
+        setPostStateValue((prev) => ({
+          ...prev,
+          selectedPost: updatedPost,
+        }));
+      }
+
       // update post document in database
       const postDocRef = doc(firestore, "posts", post.id!);
 
@@ -151,7 +165,12 @@ const usePosts = () => {
     router.push(`/r/${post.communityId}/comments/${post.id}`);
   };
 
-  const onDeletePost = async (post: Post): Promise<boolean> => {
+  const onDeletePost = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    post: Post
+  ): Promise<boolean> => {
+    event.stopPropagation();
+
     try {
       // check if post has image and delete the image
       if (post.imageURL) {
