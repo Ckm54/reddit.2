@@ -12,17 +12,29 @@ type HeaderProps = {
 
 const Header = ({ communityData }: HeaderProps) => {
   const [user] = useAuthState(auth);
-  const { loading, communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
+  const { loading, communityStateValue, onJoinOrLeaveCommunity } =
+    useCommunityData();
 
-  const isJoined = !!communityStateValue.mySnippets.find(item => item.communityId === communityData.id);
+  const isJoined = !!communityStateValue.mySnippets.find(
+    (item) => item.communityId === communityData.id
+  );
 
   return (
     <Flex direction={"column"} width="100%" height={"146px"}>
       <Box height="50%" bg="blue.400" />
       <Flex justify="center" bg="white" flexGrow={1}>
         <Flex width={"95%"} maxWidth="860px">
-          {communityData.imageURL ? (
-            <Image />
+          {communityStateValue.currentCommunity?.imageURL ? (
+            <Image
+              borderRadius={"full"}
+              boxSize="66px"
+              position={"relative"}
+              top={-3}
+              color="blue.500"
+              border={"4px solid white"}
+              src={communityStateValue.currentCommunity.imageURL}
+              alt="community profile image"
+            />
           ) : (
             <Icon
               as={FaReddit}
