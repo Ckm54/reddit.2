@@ -68,6 +68,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   } catch (error) {
     // could add an error page
+    return {
+      redirect: {
+        destination: "/",
+        statusCode: 307,
+      },
+    };
     console.log("getServersidePropsError", error);
   }
 }

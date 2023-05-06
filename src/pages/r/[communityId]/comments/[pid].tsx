@@ -12,7 +12,6 @@ const PostDetailsPage = () => {
   const { postStateValue, setPostStateValue, onDeletePost, onVote } =
     usePosts();
 
-  console.log(postStateValue);
   return (
     <PageContent>
       <>
