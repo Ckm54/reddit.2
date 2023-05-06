@@ -12,16 +12,19 @@ const usePosts = () => {
 
   const onVote = async (post: Post, vote: number, communityId: string) => {
     //Check if user is unauthenticated then open auth modal
+
+    const { voteStatus } = post;
+
+    // check if there is an existing vote
+    const existingVote = postStateValue.postVotes.find(
+      (vote) => vote.postId === post.id
+    );
+
     try {
       // if new vote change vote ---- add or subtract one - create a new postVote document
       // else ::: user removing vote --- delete postVote document
       // else ::: user flipping vote eg upvote a downvote vice versa -- add or subtract 2 - update existing postVote document
-      const { voteStatus } = post;
 
-      // check if there is an existing vote
-      const existingVote = postStateValue.postVotes.find(
-        (vote) => vote.postId === post.id
-      );
       const batch = writeBatch(firestore);
       // create copies of state
       const updatedPost = { ...post };
@@ -74,7 +77,9 @@ const usePosts = () => {
         // user is flipping vote --- changes by 2
         else {
           // add/subtract 2 to/from vote status
-          updatedPost.voteStatus = voteStatus * 2 * vote;
+          voteChange = 2 * vote;
+
+          updatedPost.voteStatus = voteStatus + 2 * vote;
 
           const voteIndex = postStateValue.postVotes.findIndex(
             (vote) => vote.id === existingVote.id
@@ -89,8 +94,6 @@ const usePosts = () => {
           batch.update(postVoteRef, {
             voteValue: vote,
           });
-
-          voteChange = 2 * vote;
         }
       }
 
