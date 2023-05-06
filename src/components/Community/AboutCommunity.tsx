@@ -29,7 +29,6 @@ type Props = {
 };
 
 const AboutCommunity = ({ communityData }: Props) => {
-  const router = useRouter();
   const [user] = useAuthState(auth);
   const selectedFileRef = React.useRef<HTMLInputElement>(null);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
@@ -113,7 +112,7 @@ const AboutCommunity = ({ communityData }: Props) => {
               </Text>
             )}
           </Flex>
-          <Link href={`/r/${router.query.communityId}/submit`}>
+          <Link href={`/r/${communityData.id}/submit`}>
             <Button mt={3} height="30px" width={"100%"}>
               Create Post
             </Button>

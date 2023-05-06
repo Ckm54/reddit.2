@@ -11,7 +11,6 @@ type HeaderProps = {
 };
 
 const Header = ({ communityData }: HeaderProps) => {
-  const [user] = useAuthState(auth);
   const { loading, communityStateValue, onJoinOrLeaveCommunity } =
     useCommunityData();
 
