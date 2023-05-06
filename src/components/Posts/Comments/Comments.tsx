@@ -6,7 +6,7 @@ import CommentInput from "./CommentInput";
 
 type CommentsProps = {
   user: User;
-  selectedPost: Post;
+  selectedPost: Post | null;
   communityId: string;
 };
 

@@ -51,7 +51,7 @@ const CommentInput = ({
           >
             <Button
               right={"26px"}
-              disabled={!commentText.length}
+              isDisabled={!commentText.length}
               isLoading={creatingComment}
               onClick={() => onCreateComment(commentText)}
             >
