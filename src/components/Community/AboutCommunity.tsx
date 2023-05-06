@@ -1,5 +1,5 @@
-import { Community } from "@/atoms/communityAtom";
-import { auth } from "@/firebase/clientApp";
+import { Community, communityState } from "@/atoms/communityAtom";
+import { auth, firestore, storage } from "@/firebase/clientApp";
 import useSelectFile from "@/hooks/useSelectFile";
 import {
   Box,
@@ -10,7 +10,10 @@ import {
   Divider,
   Button,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
+import { doc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,6 +22,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { FaReddit } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { RiCakeLine } from "react-icons/ri";
+import { useSetRecoilState } from "recoil";
 
 type Props = {
   communityData: Community;
@@ -27,8 +31,37 @@ type Props = {
 const AboutCommunity = ({ communityData }: Props) => {
   const router = useRouter();
   const [user] = useAuthState(auth);
-  const selectedFileRef = React.useRef<string>();
+  const selectedFileRef = React.useRef<HTMLInputElement>(null);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+  const [uploadingImage, setUploadingImage] = React.useState(false);
+  const setCommunityStateValue = useSetRecoilState(communityState);
+
+  const onUpdateImage = async () => {
+    if (!selectedFile) return;
+    setUploadingImage(true);
+    try {
+      const imageRef = ref(storage, `communities/${communityData.id}/image`);
+      await uploadString(imageRef, selectedFile, "data_url");
+      const downloadURL = await getDownloadURL(imageRef);
+
+      // update community document in firebase
+      await updateDoc(doc(firestore, "communities", communityData.id), {
+        imageURL: downloadURL,
+      });
+
+      // update recoil state
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: {
+          ...prev.currentCommunity,
+          imageURL: downloadURL,
+        } as Community,
+      }));
+    } catch (error) {
+      console.log("onUpdateImageError", error);
+    }
+    setUploadingImage(false);
+  };
 
   return (
     <Box position={"sticky"} top="14px">
@@ -97,7 +130,7 @@ const AboutCommunity = ({ communityData }: Props) => {
                     color="blue.500"
                     cursor={"pointer"}
                     _hover={{ textDecoration: "underline" }}
-                    onClick={() => {}}
+                    onClick={() => selectedFileRef.current?.click()}
                   >
                     Change Image
                   </Text>
@@ -117,6 +150,20 @@ const AboutCommunity = ({ communityData }: Props) => {
                     />
                   )}
                 </Flex>
+                {selectedFile &&
+                  (uploadingImage ? (
+                    <Spinner />
+                  ) : (
+                    <Text onClick={onUpdateImage}>Save Changes</Text>
+                  ))}
+                <input
+                  id="file-upload"
+                  type={"file"}
+                  accept="image/x-png, image/gif,image/jpeg"
+                  hidden
+                  ref={selectedFileRef}
+                  onChange={onSelectFile}
+                />
               </Stack>
             </>
           )}
