@@ -104,6 +104,11 @@ const usePosts = () => {
       await batch.commit();
 
       // update state -- recoil state
+      const postIndex = postStateValue.posts.findIndex(
+        (item) => item.id === post.id
+      );
+      updatedPosts[postIndex] = updatedPost;
+
       setPostStateValue((prev) => ({
         ...prev,
         posts: updatedPosts,
