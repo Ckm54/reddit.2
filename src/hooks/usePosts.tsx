@@ -1,3 +1,4 @@
+import { authModalState } from "@/atoms/authModalAtom";
 import { communityState } from "@/atoms/communityAtom";
 import { Post, postState, PostVote } from "@/atoms/PostAtom";
 import { auth, firestore, storage } from "@/firebase/clientApp";
@@ -13,15 +14,21 @@ import {
 import { deleteObject, ref } from "firebase/storage";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 const usePosts = () => {
   const [user] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
   const currentCommunity = useRecoilValue(communityState).currentCommunity;
+  const setAuthModalState = useSetRecoilState(authModalState);
 
   const onVote = async (post: Post, vote: number, communityId: string) => {
     //Check if user is unauthenticated then open auth modal
+
+    if (!user?.uid) {
+      setAuthModalState({ open: true, view: "login" });
+      return;
+    }
 
     const { voteStatus } = post;
 
