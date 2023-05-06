@@ -11,27 +11,30 @@ const PostDetailsPage = () => {
 
   const { postStateValue, setPostStateValue, onDeletePost, onVote } =
     usePosts();
-  return;
-  <PageContent>
-    <>
-      {/* selectedPost */}
-      {postStateValue.selectedPost && (
-        <PostItem
-          post={postStateValue.selectedPost!}
-          onVote={onVote}
-          onDeletePost={onDeletePost}
-          userVoteValue={
-            postStateValue.postVotes.find(
-              (post) => post.postId === postStateValue.selectedPost?.id
-            )?.voteValue
-          }
-          userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
-        />
-      )}
-      {/* Comments */}
-    </>
-    <>{/* About community */}</>
-  </PageContent>;
+
+  console.log(postStateValue);
+  return (
+    <PageContent>
+      <>
+        {/* selectedPost */}
+        {postStateValue.selectedPost && (
+          <PostItem
+            post={postStateValue.selectedPost}
+            onVote={onVote}
+            onDeletePost={onDeletePost}
+            userVoteValue={
+              postStateValue.postVotes.find(
+                (post) => post.postId === postStateValue.selectedPost?.id
+              )?.voteValue
+            }
+            userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
+          />
+        )}
+        {/* Comments */}
+      </>
+      <>{/* About community */}</>
+    </PageContent>
+  );
 };
 
 export default PostDetailsPage;
