@@ -60,7 +60,7 @@ const AboutCommunity = ({ communityData }: Props) => {
     } catch (error) {
       console.log("onUpdateImageError", error);
     }
-    setSelectedFile(undefined);
+    // setSelectedFile(undefined);
     setUploadingImage(false);
   };
 

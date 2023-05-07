@@ -22,6 +22,7 @@ import TabItemTitle from "./TabItem";
 
 type NewPostFormProps = {
   user: User;
+  communityImageURL?: string;
 };
 
 export interface TabItem {
@@ -52,7 +53,7 @@ const formTabs: TabItem[] = [
   },
 ];
 
-const NewPostForm = ({ user }: NewPostFormProps) => {
+const NewPostForm = ({ user, communityImageURL }: NewPostFormProps) => {
   const router = useRouter();
 
   const [selectedTab, setSelectedTab] = React.useState(formTabs[0].title);
@@ -73,6 +74,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     const newPost: Post = {
       communityId: communityId as string,
       creatorId: user.uid,
+      communityImageUrl: communityImageURL || "",
       creatorDisplayName: user.email!.split("@")[0],
       title: textInputs.title,
       body: textInputs.body,

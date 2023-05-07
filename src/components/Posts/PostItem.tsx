@@ -11,6 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import moment from "moment";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -133,6 +134,34 @@ const PostItem = ({
             fontSize={"9pt"}
           >
             {/* Homepage check */}
+            {homePage && (
+              <>
+                {post.imageURL ? (
+                  <Image
+                    src={post.communityImageUrl}
+                    borderRadius="full"
+                    boxSize={"18px"}
+                    mr={2}
+                    alt={`${post.communityId} img`}
+                  />
+                ) : (
+                  <Icon
+                    as={FaReddit}
+                    fontSize="18pt"
+                    mr={1}
+                    color={"blue.500"}
+                  />
+                )}
+                <Link href={`r/${post.communityId}`}>
+                  <Text
+                    fontWeight={700}
+                    _hover={{ textDecoration: "underline" }}
+                    onClick={(event) => event.stopPropagation()}
+                  >{`r/${post.communityId}`}</Text>
+                </Link>
+                <Icon as={BsDot} color="gray.500" fontSize={8} />
+              </>
+            )}
 
             <Text>
               Posted by u/{post.creatorDisplayName}{" "}
