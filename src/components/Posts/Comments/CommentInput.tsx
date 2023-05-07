@@ -41,6 +41,7 @@ const CommentInput = ({
           />
           <Flex
             position={"absolute"}
+            zIndex={99}
             left="1px"
             right={0.1}
             bottom="1px"
