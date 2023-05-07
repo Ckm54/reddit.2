@@ -136,7 +136,7 @@ const PostItem = ({
             {/* Homepage check */}
             {homePage && (
               <>
-                {post.imageURL ? (
+                {post.communityImageUrl ? (
                   <Image
                     src={post.communityImageUrl}
                     borderRadius="full"
