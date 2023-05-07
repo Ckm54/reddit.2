@@ -37,6 +37,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [fetchingComments, setFetchingComments] = React.useState(true);
   const [creatingComment, setCreatingComment] = React.useState(false);
+  const [commentDeletedId, setCommentDeletedId] = React.useState("");
   const setPostState = useSetRecoilState(postState);
 
   const onCreateComment = async () => {
@@ -86,10 +87,37 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
     setCreatingComment(false);
   };
 
-  const onDeleteComment = async (comment: any) => {
-    // delete a comment document
-    // update the post's number of comments
-    // update state to show new comment and number of comments - state
+  const onDeleteComment = async (comment: Comment) => {
+    setCommentDeletedId(comment.id);
+    try {
+      // delete a comment document
+      const batch = writeBatch(firestore);
+
+      const commentDocRef = doc(firestore, "comments", comment.id);
+      batch.delete(commentDocRef);
+
+      // update the post's number of comments
+      const postDocRef = doc(firestore, "posts", selectedPost?.id!);
+      batch.update(postDocRef, {
+        numberOfComments: increment(-1),
+      });
+
+      await batch.commit();
+
+      // update state to show new comment and number of comments - state
+      setPostState((prev) => ({
+        ...prev,
+        selectedPost: {
+          ...prev.selectedPost,
+          numberOfComments: prev.selectedPost?.numberOfComments! - 1,
+        } as Post,
+      }));
+
+      setComments((prev) => prev.filter((item) => item.id !== comment.id));
+    } catch (error) {
+      console.error("onDeletecommentError", error);
+    }
+    setCommentDeletedId("");
   };
 
   const getPostComments = async () => {
@@ -119,6 +147,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
     if (!selectedPost) return;
     getPostComments();
   }, [selectedPost]);
+
   return (
     <Box background={"white"} borderRadius="0px 0px 4px 4px" p={2}>
       <Flex
@@ -173,7 +202,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
                     key={comment.id}
                     comment={comment}
                     onDeleteComment={onDeleteComment}
-                    deletingComment={false}
+                    deletingComment={commentDeletedId === comment.id}
                     userId={user.uid}
                   />
                 ))}
