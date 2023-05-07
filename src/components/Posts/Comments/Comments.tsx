@@ -137,6 +137,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       }));
 
       setComments(comments as Comment[]);
+      
     } catch (error) {
       console.error("getPostCommentsError", error);
     }
