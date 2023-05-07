@@ -20,7 +20,7 @@ const Submit = () => {
         {user && (
           <NewPostForm
             user={user}
-            communityImageURL={communityStateValue.currentCommunity?.imageURL}
+            communityImageUrl={communityStateValue.currentCommunity?.imageURL}
           />
         )}
       </>
