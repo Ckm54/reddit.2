@@ -40,6 +40,7 @@ type PostItemProps = {
     post: Post
   ) => Promise<boolean>;
   onSelectPost?: (post: Post) => void;
+  homePage?: boolean;
 };
 
 const PostItem = ({
@@ -49,6 +50,7 @@ const PostItem = ({
   onVote,
   onDeletePost,
   onSelectPost,
+  homePage,
 }: PostItemProps) => {
   const [loadingImage, setLoadingImage] = React.useState(true);
   const [error, setError] = React.useState(false);
@@ -131,6 +133,7 @@ const PostItem = ({
             fontSize={"9pt"}
           >
             {/* Homepage check */}
+
             <Text>
               Posted by u/{post.creatorDisplayName}{" "}
               {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}
