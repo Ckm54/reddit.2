@@ -1,4 +1,4 @@
-import { Post } from "@/atoms/PostAtom";
+import { Post, PostVote } from "@/atoms/PostAtom";
 import CreatePostLink from "@/components/Community/CreatePostLink";
 import PageContent from "@/components/Layout/PageContent";
 import PostItem from "@/components/Posts/PostItem";
@@ -95,7 +95,30 @@ const Home: NextPage = () => {
     setLoading(false);
   };
 
-  const getUserPostVotes = () => {};
+  const getUserPostVotes = async () => {
+    try {
+      const postIds = postStateValue.posts.map((post) => post.id);
+
+      const postVotesQuery = query(
+        collection(firestore, `users/${user?.uid}/postVotes`),
+        where("postId", "in", postIds)
+      );
+
+      const postVotesDocs = await getDocs(postVotesQuery);
+
+      const postVotes = postVotesDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postVotes as PostVote[],
+      }));
+    } catch (error) {
+      console.error("get user post votes error:", error);
+    }
+  };
 
   // useEffects
   React.useEffect(() => {
@@ -105,6 +128,10 @@ const Home: NextPage = () => {
   React.useEffect(() => {
     if (communityStateValue.snippetsFetched) buildAuthUserHomePage();
   }, [communityStateValue.snippetsFetched]);
+
+  React.useEffect(() => {
+    if (user && postStateValue.posts.length) getUserPostVotes();
+  }, [user, postStateValue.posts]);
 
   return (
     <PageContent>
