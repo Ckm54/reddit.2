@@ -21,9 +21,17 @@ import { firestore } from "@/firebase/clientApp";
 import React from "react";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
-import { doc, getDoc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
+import { useRouter } from "next/router";
+import useDirectory from "@/hooks/useDirectory";
 
 type Props = {
   open: boolean;
@@ -36,8 +44,10 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
   const [communityType, setcommunityType] = React.useState("public");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const { toggleMenuOpen } = useDirectory();
 
-  const [ user ] = useAuthState(auth);
+  const [user] = useAuthState(auth);
+  const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // recalculate how many characters are left
@@ -58,43 +68,52 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
       );
       return;
     }
-    
+
     setLoading(true);
-   try {
-     // check name is not taken
-    // if valid --- create the community document in firestore
-    const communityDocumentReference = doc(firestore, 'communities', communityName);
+    try {
+      // check name is not taken
+      // if valid --- create the community document in firestore
+      const communityDocumentReference = doc(
+        firestore,
+        "communities",
+        communityName
+      );
 
-    await runTransaction(firestore, async (transaction) => {
-      const communityDoc = await transaction.get(communityDocumentReference);
-  
-      if(communityDoc.exists()) {
-        throw new Error(`Sorry, r/${communityName} is taken. Try another.`);
-      }
+      await runTransaction(firestore, async (transaction) => {
+        const communityDoc = await transaction.get(communityDocumentReference);
 
-      transaction.set(communityDocumentReference, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
-        // creator id
-        // createdAt
-        // numberOfMembers
-        // Privacy type
+        if (communityDoc.exists()) {
+          throw new Error(`Sorry, r/${communityName} is taken. Try another.`);
+        }
+
+        transaction.set(communityDocumentReference, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityType,
+          // creator id
+          // createdAt
+          // numberOfMembers
+          // Privacy type
+        });
+
+        // create community snippet on user
+        transaction.set(
+          doc(firestore, `users/${user?.uid}/communitySnippets`, communityName),
+          {
+            communityId: communityName,
+            isModerator: true,
+          }
+        );
       });
 
-      // create community snippet on user
-      transaction.set(doc(firestore, `users/${user?.uid}/communitySnippets`, communityName), {
-        communityId: communityName,
-        isModerator: true,
-      })
-    })
-
-
-   } catch (error: any) {
-    console.log('handleCreateCommunity error', error);
-    setError(error.message)
-   }
+      handleClose();
+      // route user to created community page
+      router.push(`/r/${communityName}`);
+    } catch (error: any) {
+      console.log("handleCreateCommunity error", error);
+      setError(error.message);
+    }
 
     setLoading(false);
   };
@@ -210,7 +229,11 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
             >
               Cancel
             </Button>
-            <Button height="30px" onClick={handleCreateCommunity} isLoading={loading}>
+            <Button
+              height="30px"
+              onClick={handleCreateCommunity}
+              isLoading={loading}
+            >
               Create Community
             </Button>
           </ModalFooter>
