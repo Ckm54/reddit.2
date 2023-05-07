@@ -1,22 +1,28 @@
-import { communityState } from "@/atoms/communityAtom";
 import { Post } from "@/atoms/PostAtom";
 import CreatePostLink from "@/components/Community/CreatePostLink";
 import PageContent from "@/components/Layout/PageContent";
 import PostItem from "@/components/Posts/PostItem";
 import PostLoader from "@/components/Posts/PostLoader";
 import { auth, firestore } from "@/firebase/clientApp";
+import useCommunityData from "@/hooks/useCommunityData";
 import usePosts from "@/hooks/usePosts";
 import { Stack } from "@chakra-ui/react";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { NextPage } from "next";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilValue } from "recoil";
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth);
   const [loading, setLoading] = React.useState(false);
-  const communityStateValue = useRecoilValue(communityState);
+  const { communityStateValue } = useCommunityData();
   const {
     setPostStateValue,
     postStateValue,
@@ -25,7 +31,41 @@ const Home: NextPage = () => {
     onVote,
   } = usePosts();
 
-  const buildAuthUserHomePage = () => {};
+  const buildAuthUserHomePage = async () => {
+    setLoading(true);
+    try {
+      // get a set of posts from user's communities -- first 10
+      if (communityStateValue.mySnippets.length) {
+        const myCommunitiesIds = communityStateValue.mySnippets.map(
+          (snippet) => snippet.communityId
+        );
+
+        const postsQuery = query(
+          collection(firestore, "posts"),
+          where("communityId", "in", myCommunitiesIds),
+          limit(10)
+        );
+
+        const postsDocs = await getDocs(postsQuery);
+
+        const posts = postsDocs.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setPostStateValue((prev) => ({
+          ...prev,
+          posts: posts as Post[],
+        }));
+      } else {
+        // build a generic feed
+        buildNonAuthUserHomeFeed();
+      }
+    } catch (error) {
+      console.error("build auth user feed error", error);
+    }
+    setLoading(false);
+  };
 
   const buildNonAuthUserHomeFeed = async () => {
     setLoading(true);
@@ -61,6 +101,10 @@ const Home: NextPage = () => {
   React.useEffect(() => {
     if (!user && !loadingUser) buildNonAuthUserHomeFeed();
   }, [user, loadingUser]);
+
+  React.useEffect(() => {
+    if (communityStateValue.snippetsFetched) buildAuthUserHomePage();
+  }, [communityStateValue.snippetsFetched]);
 
   return (
     <PageContent>
