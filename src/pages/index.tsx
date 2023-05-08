@@ -1,5 +1,8 @@
 import { Post, PostVote } from "@/atoms/PostAtom";
 import CreatePostLink from "@/components/Community/CreatePostLink";
+import PersonalHome from "@/components/Community/PersonalHome";
+import PremiumTrial from "@/components/Community/PremiumTrial";
+import Recommendations from "@/components/Community/Recommendations";
 import PageContent from "@/components/Layout/PageContent";
 import PostItem from "@/components/Posts/PostItem";
 import PostLoader from "@/components/Posts/PostLoader";
@@ -131,6 +134,13 @@ const Home: NextPage = () => {
 
   React.useEffect(() => {
     if (user && postStateValue.posts.length) getUserPostVotes();
+
+    return () => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+    };
   }, [user, postStateValue.posts]);
 
   return (
@@ -160,7 +170,11 @@ const Home: NextPage = () => {
           </Stack>
         )}
       </>
-      <></>
+      <Stack spacing={5} position="fixed">
+        <Recommendations />
+        <PremiumTrial />
+        <PersonalHome />
+      </Stack>
     </PageContent>
   );
 };
