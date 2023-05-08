@@ -30,7 +30,7 @@ type Props = {
 const AboutCommunity = ({ communityData }: Props) => {
   const [user] = useAuthState(auth);
   const selectedFileRef = React.useRef<HTMLInputElement>(null);
-  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+  const { selectedFile, onSelectFile } = useSelectFile();
   const [uploadingImage, setUploadingImage] = React.useState(false);
   const [communityStateValue, setCommunityStateValue] =
     useRecoilState(communityState);

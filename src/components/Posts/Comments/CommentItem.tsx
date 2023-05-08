@@ -21,7 +21,7 @@ export type Comment = {
 
 type CommentItemProps = {
   comment: Comment;
-  onDeleteComment: (comment: Comment) => void;
+  onDeleteComment: (_comment: Comment) => void;
   deletingComment: boolean;
   userId: string;
 };

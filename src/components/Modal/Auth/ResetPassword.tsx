@@ -5,14 +5,13 @@ import { BsDot, BsReddit } from "react-icons/bs";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import { auth } from "@/firebase/clientApp";
-import { FIREBASE_ERRORS } from "@/firebase/errors";
 
 const ResetPassword = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const [email, setEmail] = React.useState("");
   const [resetError, setResetError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const [sendPasswordResetEmail, sending, error] =
+  const [sendPasswordResetEmail, sending, _error] =
     useSendPasswordResetEmail(auth);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,9 +67,11 @@ const ResetPassword = () => {
               bg="gray.50"
             />
 
-            {resetError && <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={2}>
-              Email address not found!
-            </Text>}
+            {resetError && (
+              <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={2}>
+                Email address not found!
+              </Text>
+            )}
 
             <Button
               width="100%"

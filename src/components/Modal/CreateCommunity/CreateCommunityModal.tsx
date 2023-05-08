@@ -1,37 +1,29 @@
+import { auth, firestore } from "@/firebase/clientApp";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
   Box,
+  Button,
   Divider,
-  Text,
-  Input,
-  Stack,
-  Icon,
   Flex,
-  RadioGroup,
+  Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Radio,
+  RadioGroup,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-import { firestore } from "@/firebase/clientApp";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
-import {
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
-import { useRouter } from "next/router";
-import useDirectory from "@/hooks/useDirectory";
 
 type Props = {
   open: boolean;
@@ -44,7 +36,6 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
   const [communityType, setcommunityType] = React.useState("public");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const { toggleMenuOpen } = useDirectory();
 
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -60,7 +51,7 @@ const CreateCommunityModal = ({ open, handleClose }: Props) => {
   const handleCreateCommunity = async () => {
     // validate the community name --- btwn 3 and 21 characters and not already in use
     if (error) setError("");
-    const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const format = /[ `!@#$%^&*()+\-=[\]{};':"\\|,.<>/?~]/;
 
     if (format.test(communityName) || communityName.length < 3) {
       setError(

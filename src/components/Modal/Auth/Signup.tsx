@@ -14,7 +14,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
-  const [createUserWithEmailAndPassword, user, loading, userError] =
+  const [createUserWithEmailAndPassword, _user, loading, userError] =
     useCreateUserWithEmailAndPassword(auth);
   const [error, setError] = React.useState("");
 

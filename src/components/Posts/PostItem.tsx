@@ -31,16 +31,16 @@ type PostItemProps = {
   userIsCreator: boolean;
   userVoteValue?: number;
   onVote: (
-    event: React.MouseEvent<SVGElement, MouseEvent>,
-    post: Post,
-    vote: number,
-    communityId: string
+    _event: React.MouseEvent<SVGElement, MouseEvent>,
+    _post: Post,
+    _vote: number,
+    _communityId: string
   ) => void;
   onDeletePost: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    post: Post
+    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    _post: Post
   ) => Promise<boolean>;
-  onSelectPost?: (post: Post) => void;
+  onSelectPost?: (_post: Post) => void;
   homePage?: boolean;
 };
 

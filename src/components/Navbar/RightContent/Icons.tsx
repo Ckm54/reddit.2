@@ -8,9 +8,7 @@ import {
   IoVideocamOutline,
 } from "react-icons/io5";
 
-type Props = {};
-
-const Icons = (props: Props) => {
+const Icons = () => {
   return (
     <Flex>
       <Flex

@@ -9,7 +9,6 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
-import { TiHome } from "react-icons/ti";
 import Communities from "./Communities";
 
 const Directory = () => {

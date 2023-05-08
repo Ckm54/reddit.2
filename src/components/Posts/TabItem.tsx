@@ -5,10 +5,10 @@ import { TabItem } from "./NewPostForm";
 type TabItemProps = {
   item: TabItem;
   selected: boolean;
-  setSelectedTab: (value: string) => void;
+  setSelectedTab: (_value: string) => void;
 };
 
-const TabItem = ({ item, selected, setSelectedTab }: TabItemProps) => {
+const TabItemComponent = ({ item, selected, setSelectedTab }: TabItemProps) => {
   return (
     <Flex
       justify={"center"}
@@ -34,4 +34,4 @@ const TabItem = ({ item, selected, setSelectedTab }: TabItemProps) => {
   );
 };
 
-export default TabItem;
+export default TabItemComponent;

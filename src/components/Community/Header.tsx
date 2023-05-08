@@ -3,8 +3,6 @@ import { Box, Button, Flex, Icon, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { FaReddit } from "react-icons/fa";
 import useCommunityData from "@/hooks/useCommunityData";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
 
 type HeaderProps = {
   communityData: Community;

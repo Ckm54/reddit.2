@@ -191,6 +191,7 @@ const useCommunityData = () => {
     communityStateValue,
     onJoinOrLeaveCommunity,
     loading,
+    error,
   };
 };
 

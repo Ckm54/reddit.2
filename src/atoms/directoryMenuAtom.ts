@@ -1,4 +1,4 @@
-import { IconBaseProps, IconType } from "react-icons";
+import { IconType } from "react-icons";
 import { TiHome } from "react-icons/ti";
 import { atom } from "recoil";
 

@@ -7,7 +7,7 @@ type TextInputsProps = {
     body: string;
   };
   onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   handleCreatePost: () => void;
   loading: boolean;

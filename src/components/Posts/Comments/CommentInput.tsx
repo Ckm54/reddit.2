@@ -5,10 +5,10 @@ import React from "react";
 
 type CommentInputProps = {
   commentText: string;
-  setCommentText: (value: string) => void;
+  setCommentText: (_value: string) => void;
   user: User;
   creatingComment: boolean;
-  onCreateComment: (commentText: string) => void;
+  onCreateComment: (_commentText: string) => void;
 };
 
 const CommentInput = ({

@@ -7,9 +7,7 @@ import { GrAdd } from "react-icons/gr";
 import { useRecoilValue } from "recoil";
 import MenuListItem from "./MenuListItem";
 
-type Props = {};
-
-const Communities = (props: Props) => {
+const Communities = () => {
   const [open, setOpen] = React.useState(false);
   const mySnippets = useRecoilValue(communityState).mySnippets;
 

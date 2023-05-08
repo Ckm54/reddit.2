@@ -6,9 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FIREBASE_ERRORS } from "@/firebase/errors";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
 
   const [loginFormValues, setLoginFormValues] = React.useState({
@@ -16,7 +14,7 @@ const Login = (props: Props) => {
     password: "",
   });
 
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, _user, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
   // handle firebase logic
@@ -80,27 +78,36 @@ const Login = (props: Props) => {
       />
 
       <Text textAlign={"center"} color="red" fontSize={"10pt"} mt={4}>
-          {FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}
+        {FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}
       </Text>
-      <Button width="100%" height="36px" mt={2} mb={2} type="submit" isLoading={loading}>
+      <Button
+        width="100%"
+        height="36px"
+        mt={2}
+        mb={2}
+        type="submit"
+        isLoading={loading}
+      >
         Log In
       </Button>
 
-      <Flex justifyContent={'center'} mb={2}>
-        <Text fontSize={'9pt'} mr={1}>
+      <Flex justifyContent={"center"} mb={2}>
+        <Text fontSize={"9pt"} mr={1}>
           Forgot password?
         </Text>
         <Text
-          fontSize={'9pt'}
-          color='blue.500'
-          cursor={'pointer'}
+          fontSize={"9pt"}
+          color="blue.500"
+          cursor={"pointer"}
           onClick={() =>
             setAuthModalState((prev) => ({
               ...prev,
               view: "resetPassword",
             }))
           }
-        >Reset</Text>
+        >
+          Reset
+        </Text>
       </Flex>
 
       <Flex fontSize={"9pt"} justifyContent="center">

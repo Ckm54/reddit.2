@@ -3,9 +3,9 @@ import React, { useRef } from "react";
 
 type ImageUploadProps = {
   selectedFile?: string;
-  onSelectImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setSelectedTab: (value: string) => void;
-  setSelectedFile: (value: string) => void;
+  onSelectImage: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  setSelectedTab: (_value: string) => void;
+  setSelectedFile: (_value: string) => void;
 };
 
 const ImageUpload = ({
@@ -17,7 +17,7 @@ const ImageUpload = ({
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Flex direction={'column'} justify={"center"} align="center" width="100%">
+    <Flex direction={"column"} justify={"center"} align="center" width="100%">
       {selectedFile ? (
         <>
           <Image
