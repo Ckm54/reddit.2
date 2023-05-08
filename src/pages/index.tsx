@@ -34,7 +34,35 @@ const Home: NextPage = () => {
     onVote,
   } = usePosts();
 
-  const buildAuthUserHomePage = async () => {
+  const buildNonAuthUserHomeFeed = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      // fet 10 most popular posts in database
+      const postQuery = query(
+        collection(firestore, "posts"),
+        orderBy("voteStatus", "desc"),
+        limit(10)
+      );
+
+      const postDocs = await getDocs(postQuery);
+
+      const posts = postDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      // update state
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: posts as Post[],
+      }));
+    } catch (error) {
+      console.error("Build non auth user home feed error", error);
+    }
+    setLoading(false);
+  }, [setPostStateValue]);
+
+  const buildAuthUserHomePage = React.useCallback(async () => {
     setLoading(true);
     try {
       // get a set of posts from user's communities -- first 10
@@ -68,39 +96,15 @@ const Home: NextPage = () => {
       console.error("build auth user feed error", error);
     }
     setLoading(false);
-  };
+  }, [
+    buildNonAuthUserHomeFeed,
+    communityStateValue.mySnippets,
+    setPostStateValue,
+  ]);
 
-  const buildNonAuthUserHomeFeed = async () => {
-    setLoading(true);
+  const getUserPostVotes = React.useCallback(async () => {
     try {
-      // fet 10 most popular posts in database
-      const postQuery = query(
-        collection(firestore, "posts"),
-        orderBy("voteStatus", "desc"),
-        limit(10)
-      );
-
-      const postDocs = await getDocs(postQuery);
-
-      const posts = postDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      // update state
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: posts as Post[],
-      }));
-    } catch (error) {
-      console.error("Build non auth user home feed error", error);
-    }
-    setLoading(false);
-  };
-
-  const getUserPostVotes = async () => {
-    try {
-      const postIds = postStateValue.posts.map((post) => post.id);
+      const postIds = postStateValue.posts.map((post: Post) => post.id);
 
       const postVotesQuery = query(
         collection(firestore, `users/${user?.uid}/postVotes`),
@@ -121,16 +125,16 @@ const Home: NextPage = () => {
     } catch (error) {
       console.error("get user post votes error:", error);
     }
-  };
+  }, [postStateValue.posts, setPostStateValue, user?.uid]);
 
   // useEffects
   React.useEffect(() => {
     if (!user && !loadingUser) buildNonAuthUserHomeFeed();
-  }, [user, loadingUser]);
+  }, [user, loadingUser, buildNonAuthUserHomeFeed]);
 
   React.useEffect(() => {
     if (communityStateValue.snippetsFetched) buildAuthUserHomePage();
-  }, [communityStateValue.snippetsFetched]);
+  }, [buildAuthUserHomePage, communityStateValue.snippetsFetched]);
 
   React.useEffect(() => {
     if (user && postStateValue.posts.length) getUserPostVotes();
@@ -141,7 +145,7 @@ const Home: NextPage = () => {
         postVotes: [],
       }));
     };
-  }, [user, postStateValue.posts]);
+  }, [user, postStateValue.posts, getUserPostVotes, setPostStateValue]);
 
   return (
     <PageContent>
