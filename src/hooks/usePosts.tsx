@@ -1,7 +1,7 @@
-import { authModalState } from "@/atoms/authModalAtom";
-import { communityState } from "@/atoms/communityAtom";
-import { Post, postState, PostVote } from "@/atoms/PostAtom";
-import { auth, firestore, storage } from "@/firebase/clientApp";
+import { authModalState } from '@/atoms/authModalAtom';
+import { communityState } from '@/atoms/communityAtom';
+import { Post, postState, PostVote } from '@/atoms/PostAtom';
+import { auth, firestore, storage } from '@/firebase/clientApp';
 import {
   collection,
   deleteDoc,
@@ -10,12 +10,12 @@ import {
   query,
   where,
   writeBatch,
-} from "firebase/firestore";
-import { deleteObject, ref } from "firebase/storage";
-import { useRouter } from "next/router";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+} from 'firebase/firestore';
+import { deleteObject, ref } from 'firebase/storage';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const usePosts = () => {
   const [user] = useAuthState(auth);
@@ -36,7 +36,7 @@ const usePosts = () => {
     //Check if user is unauthenticated then open auth modal
 
     if (!user?.uid) {
-      setAuthModalState({ open: true, view: "login" });
+      setAuthModalState({ open: true, view: 'login' });
       return;
     }
 
@@ -64,7 +64,7 @@ const usePosts = () => {
       // IS A NEW VOTE
       if (!existingVote) {
         const postVoteRef = doc(
-          collection(firestore, "users", `${user?.uid}/postVotes`)
+          collection(firestore, 'users', `${user?.uid}/postVotes`)
         );
 
         const newVote: PostVote = {
@@ -84,7 +84,7 @@ const usePosts = () => {
       else {
         const postVoteRef = doc(
           firestore,
-          "users",
+          'users',
           `${user?.uid}/postVotes/${existingVote.id}`
         );
 
@@ -132,7 +132,7 @@ const usePosts = () => {
       }
 
       // update post document in database
-      const postDocRef = doc(firestore, "posts", post.id!);
+      const postDocRef = doc(firestore, 'posts', post.id!);
 
       batch.update(postDocRef, {
         voteStatus: voteStatus + voteChange,
@@ -152,7 +152,7 @@ const usePosts = () => {
         postVotes: updatedPostVotes,
       }));
     } catch (error) {
-      console.error("onVoteError", error);
+      console.error('onVoteError', error);
     }
   };
 
@@ -178,7 +178,7 @@ const usePosts = () => {
         await deleteObject(imageRef);
       }
       // delete the post itself from firestore database
-      const postDocRef = doc(firestore, "posts", post.id!);
+      const postDocRef = doc(firestore, 'posts', post.id!);
       await deleteDoc(postDocRef);
       // update recoil state
       setPostStateValue((prev) => ({
@@ -194,8 +194,8 @@ const usePosts = () => {
   const getCommunityPostVotes = React.useCallback(
     async (communityId: string) => {
       const postVotesQuery = query(
-        collection(firestore, "users", `${user?.uid}/postVotes`),
-        where("communityId", "==", communityId)
+        collection(firestore, 'users', `${user?.uid}/postVotes`),
+        where('communityId', '==', communityId)
       );
 
       const postVoteDocs = await getDocs(postVotesQuery);

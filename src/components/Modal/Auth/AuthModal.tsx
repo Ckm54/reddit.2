@@ -1,5 +1,5 @@
-import { authModalState } from "@/atoms/authModalAtom";
-import { auth } from "@/firebase/clientApp";
+import { authModalState } from '@/atoms/authModalAtom';
+import { auth } from '@/firebase/clientApp';
 import {
   Flex,
   Modal,
@@ -9,13 +9,13 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-} from "@chakra-ui/react";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilState } from "recoil";
-import AuthInputs from "./AuthInputs";
-import OauthButtons from "./OauthButtons";
-import ResetPassword from "./ResetPassword";
+} from '@chakra-ui/react';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRecoilState } from 'recoil';
+import AuthInputs from './AuthInputs';
+import OauthButtons from './OauthButtons';
+import ResetPassword from './ResetPassword';
 
 const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
@@ -41,29 +41,29 @@ const AuthModal: React.FC = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign={"center"}>
-            {modalState.view === "login" && "Login"}
-            {modalState.view === "signup" && "Sign Up"}
-            {modalState.view === "resetPassword" && "Reset Password"}
+          <ModalHeader textAlign={'center'}>
+            {modalState.view === 'login' && 'Login'}
+            {modalState.view === 'signup' && 'Sign Up'}
+            {modalState.view === 'resetPassword' && 'Reset Password'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
-            display={"flex"}
+            display={'flex'}
             flexDirection="column"
-            alignItems={"center"}
+            alignItems={'center'}
             justifyContent="center"
             pb={6}
           >
             <Flex
-              direction={"column"}
+              direction={'column'}
               align="center"
-              justify={"center"}
+              justify={'center'}
               width="70%"
             >
-              {modalState.view === "login" || modalState.view === "signup" ? (
+              {modalState.view === 'login' || modalState.view === 'signup' ? (
                 <React.Fragment>
                   <OauthButtons />
-                  <Text color={"gray.400"} fontWeight={700}>
+                  <Text color={'gray.400'} fontWeight={700}>
                     OR
                   </Text>
                   <AuthInputs />

@@ -1,12 +1,12 @@
-import { communityState } from "@/atoms/communityAtom";
+import { communityState } from '@/atoms/communityAtom';
 import {
   DirectoryMenuItem,
   directoryMenuState,
-} from "@/atoms/directoryMenuAtom";
-import { useRouter } from "next/router";
-import React from "react";
-import { FaReddit } from "react-icons/fa";
-import { useRecoilState, useRecoilValue } from "recoil";
+} from '@/atoms/directoryMenuAtom';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { FaReddit } from 'react-icons/fa';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const useDirectory = () => {
   const [directoryState, setDirectoryState] =
@@ -44,7 +44,7 @@ const useDirectory = () => {
           link: `/r/${currentCommunity.id}`,
           imageURL: currentCommunity.imageURL,
           icon: FaReddit,
-          iconColor: "blue.500",
+          iconColor: 'blue.500',
         },
       }));
     }

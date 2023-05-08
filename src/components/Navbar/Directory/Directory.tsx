@@ -1,5 +1,5 @@
-import useDirectory from "@/hooks/useDirectory";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import useDirectory from '@/hooks/useDirectory';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Flex,
   Menu,
@@ -8,8 +8,8 @@ import {
   Icon,
   Text,
   Image,
-} from "@chakra-ui/react";
-import Communities from "./Communities";
+} from '@chakra-ui/react';
+import Communities from './Communities';
 
 const Directory = () => {
   const { directoryState, toggleMenuOpen } = useDirectory();
@@ -17,25 +17,25 @@ const Directory = () => {
   return (
     <Menu isOpen={directoryState.isOpen} onClose={toggleMenuOpen}>
       <MenuButton
-        cursor={"pointer"}
+        cursor={'pointer'}
         padding="0px 6px"
         borderRadius={4}
         mr={2}
         ml={{ base: 0, md: 2 }}
-        _hover={{ outline: "1px solid", outlineColor: "gray.200" }}
+        _hover={{ outline: '1px solid', outlineColor: 'gray.200' }}
         onClick={toggleMenuOpen}
       >
         <Flex
-          align={"center"}
+          align={'center'}
           justify="space-between"
-          width={{ base: "auto", lg: "200px" }}
+          width={{ base: 'auto', lg: '200px' }}
         >
-          <Flex align={"center"}>
+          <Flex align={'center'}>
             {directoryState.selectedMenuItem.imageURL ? (
               <Image
                 src={directoryState.selectedMenuItem.imageURL}
                 borderRadius="full"
-                boxSize={"24px"}
+                boxSize={'24px'}
                 mr={2}
                 alt={`${directoryState.selectedMenuItem.displayText} profile image`}
               />
@@ -48,7 +48,7 @@ const Directory = () => {
               />
             )}
 
-            <Flex display={{ base: "none", md: "flex" }}>
+            <Flex display={{ base: 'none', md: 'flex' }}>
               <Text fontWeight={600} fontSize="10pt">
                 {directoryState.selectedMenuItem.displayText}
               </Text>

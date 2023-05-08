@@ -6,8 +6,8 @@ import { User } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
 const OauthButtons = () => {
-
-  const [ signInWithGoogle, userCred, loading, error ] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, userCred, loading, error] =
+    useSignInWithGoogle(auth);
 
   const createUserDocument = async (user: User) => {
     const userDocRef = doc(firestore, 'users', user.uid);
@@ -21,21 +21,34 @@ const OauthButtons = () => {
   };
 
   React.useEffect(() => {
-    if(userCred) {
-      createUserDocument(userCred.user)
+    if (userCred) {
+      createUserDocument(userCred.user);
     }
-  }, [userCred])
-  
+  }, [userCred]);
 
   return (
-    <Flex direction={'column'} width='100%'>
-      <Button mb={4} variant='oauth' isLoading={loading} onClick={() => signInWithGoogle()}>
-        <Image src='/images/googlelogo.png' height={'20px'} alt='google login' mr={4} />
+    <Flex direction={'column'} width="100%">
+      <Button
+        mb={4}
+        variant="oauth"
+        isLoading={loading}
+        onClick={() => signInWithGoogle()}
+      >
+        <Image
+          src="/images/googlelogo.png"
+          height={'20px'}
+          alt="google login"
+          mr={4}
+        />
         Continue with Google
       </Button>
-      {error && <Text textAlign={"center"} color="red" fontSize={"10pt"}>{error.message}</Text>}
+      {error && (
+        <Text textAlign={'center'} color="red" fontSize={'10pt'}>
+          {error.message}
+        </Text>
+      )}
     </Flex>
-  )
-}
+  );
+};
 
-export default OauthButtons
+export default OauthButtons;

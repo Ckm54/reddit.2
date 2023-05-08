@@ -1,6 +1,6 @@
-import { Community, communityState } from "@/atoms/communityAtom";
-import { auth, firestore, storage } from "@/firebase/clientApp";
-import useSelectFile from "@/hooks/useSelectFile";
+import { Community, communityState } from '@/atoms/communityAtom';
+import { auth, firestore, storage } from '@/firebase/clientApp';
+import useSelectFile from '@/hooks/useSelectFile';
 import {
   Box,
   Button,
@@ -11,17 +11,17 @@ import {
   Spinner,
   Stack,
   Text,
-} from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import moment from "moment";
-import Link from "next/link";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { FaReddit } from "react-icons/fa";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { RiCakeLine } from "react-icons/ri";
-import { useRecoilState } from "recoil";
+} from '@chakra-ui/react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import moment from 'moment';
+import Link from 'next/link';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaReddit } from 'react-icons/fa';
+import { HiOutlineDotsHorizontal } from 'react-icons/hi';
+import { RiCakeLine } from 'react-icons/ri';
+import { useRecoilState } from 'recoil';
 
 type Props = {
   communityData: Community;
@@ -40,11 +40,11 @@ const AboutCommunity = ({ communityData }: Props) => {
     setUploadingImage(true);
     try {
       const imageRef = ref(storage, `communities/${communityData.id}/image`);
-      await uploadString(imageRef, selectedFile, "data_url");
+      await uploadString(imageRef, selectedFile, 'data_url');
       const downloadURL = await getDownloadURL(imageRef);
 
       // update community document in firebase
-      await updateDoc(doc(firestore, "communities", communityData.id), {
+      await updateDoc(doc(firestore, 'communities', communityData.id), {
         imageURL: downloadURL,
       });
 
@@ -57,64 +57,64 @@ const AboutCommunity = ({ communityData }: Props) => {
         } as Community,
       }));
     } catch (error) {
-      console.log("onUpdateImageError", error);
+      console.log('onUpdateImageError', error);
     }
     // setSelectedFile(undefined);
     setUploadingImage(false);
   };
 
   return (
-    <Box position={"sticky"} top="14px">
+    <Box position={'sticky'} top="14px">
       <Flex
-        justify={"space-between"}
+        justify={'space-between'}
         align="center"
-        bg={"blue.400"}
+        bg={'blue.400'}
         color="white"
         p={3}
         borderRadius="4px 4px 0px 0px"
       >
-        <Text fontSize={"10pt"} fontWeight={700}>
+        <Text fontSize={'10pt'} fontWeight={700}>
           About Community
         </Text>
         <Icon as={HiOutlineDotsHorizontal} />
       </Flex>
       <Flex
-        direction={"column"}
+        direction={'column'}
         p={3}
         borderRadius="0px 0px 4px 4px"
         bg="white"
       >
         <Stack>
-          <Flex width={"100%"} p={2} fontSize="10pt" fontWeight={700}>
-            <Flex direction={"column"} flexGrow={1}>
+          <Flex width={'100%'} p={2} fontSize="10pt" fontWeight={700}>
+            <Flex direction={'column'} flexGrow={1}>
               <Text>{communityData.numberOfMembers.toLocaleString()}</Text>
               <Text>Member{communityData.numberOfMembers > 1 && `s`}</Text>
             </Flex>
-            <Flex direction={"column"} flexGrow={1}>
+            <Flex direction={'column'} flexGrow={1}>
               <Text>1</Text>
               <Text>Online</Text>
             </Flex>
           </Flex>
           <Divider />
           <Flex
-            align={"center"}
+            align={'center'}
             width="100%"
             p={1}
             fontWeight={500}
-            fontSize={"10pt"}
+            fontSize={'10pt'}
           >
             <Icon as={RiCakeLine} fontSize={18} mr={2} />
             {communityData.createdAt && (
               <Text>
-                Created:{" "}
+                Created:{' '}
                 {moment(
                   new Date(communityData.createdAt.seconds * 1000)
-                ).format("MMM DD YYYY")}
+                ).format('MMM DD YYYY')}
               </Text>
             )}
           </Flex>
           <Link href={`/r/${communityData.id}/submit`}>
-            <Button mt={3} height="30px" width={"100%"}>
+            <Button mt={3} height="30px" width={'100%'}>
               Create Post
             </Button>
           </Link>
@@ -128,8 +128,8 @@ const AboutCommunity = ({ communityData }: Props) => {
                 <Flex align="center" justify="space-between">
                   <Text
                     color="blue.500"
-                    cursor={"pointer"}
-                    _hover={{ textDecoration: "underline" }}
+                    cursor={'pointer'}
+                    _hover={{ textDecoration: 'underline' }}
                     onClick={() => selectedFileRef.current?.click()}
                   >
                     Change Image
@@ -140,7 +140,7 @@ const AboutCommunity = ({ communityData }: Props) => {
                     <Image
                       src={selectedFile || communityData.imageURL}
                       borderRadius="full"
-                      boxSize={"40px"}
+                      boxSize={'40px'}
                       alt="Community image"
                     />
                   ) : (
@@ -159,14 +159,14 @@ const AboutCommunity = ({ communityData }: Props) => {
                     <Text
                       onClick={onUpdateImage}
                       cursor="pointer"
-                      _hover={{ textDecoration: "underline" }}
+                      _hover={{ textDecoration: 'underline' }}
                     >
                       Save Changes
                     </Text>
                   ))}
                 <input
                   id="file-upload"
-                  type={"file"}
+                  type={'file'}
                   accept="image/x-png, image/gif,image/jpeg"
                   hidden
                   ref={selectedFileRef}

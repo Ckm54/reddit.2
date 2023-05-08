@@ -6,7 +6,7 @@ export const Button: ComponentStyleConfig = {
     fontSize: '10pt',
     fontWeight: 700,
     _focus: {
-      boxShadow: "none"
+      boxShadow: 'none',
     },
   },
   sizes: {

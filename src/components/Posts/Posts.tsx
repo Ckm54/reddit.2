@@ -1,13 +1,13 @@
-import { Community } from "@/atoms/communityAtom";
-import { Post } from "@/atoms/PostAtom";
-import { auth, firestore } from "@/firebase/clientApp";
-import usePosts from "@/hooks/usePosts";
-import { Stack } from "@chakra-ui/react";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import PostItem from "./PostItem";
-import PostLoader from "./PostLoader";
+import { Community } from '@/atoms/communityAtom';
+import { Post } from '@/atoms/PostAtom';
+import { auth, firestore } from '@/firebase/clientApp';
+import usePosts from '@/hooks/usePosts';
+import { Stack } from '@chakra-ui/react';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import PostItem from './PostItem';
+import PostLoader from './PostLoader';
 
 type Props = {
   communityData: Community;
@@ -31,9 +31,9 @@ const Posts = ({ communityData }: Props) => {
         setLoading(true);
         // get posts for this community
         const postsQuery = query(
-          collection(firestore, "posts"),
-          where("communityId", "==", communityData.id),
-          orderBy("createdAt", "desc")
+          collection(firestore, 'posts'),
+          where('communityId', '==', communityData.id),
+          orderBy('createdAt', 'desc')
         );
 
         const postDocs = await getDocs(postsQuery);
@@ -49,7 +49,7 @@ const Posts = ({ communityData }: Props) => {
           posts: posts as Post[],
         }));
       } catch (error: any) {
-        console.log("Get posts error: ", error.message);
+        console.log('Get posts error: ', error.message);
       }
       setLoading(false);
     };

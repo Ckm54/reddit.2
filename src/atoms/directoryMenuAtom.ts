@@ -1,6 +1,6 @@
-import { IconType } from "react-icons";
-import { TiHome } from "react-icons/ti";
-import { atom } from "recoil";
+import { IconType } from 'react-icons';
+import { TiHome } from 'react-icons/ti';
+import { atom } from 'recoil';
 
 export type DirectoryMenuItem = {
   displayText: string;
@@ -17,10 +17,10 @@ interface DirectoryMenuState {
 }
 
 export const defaultMenuItem: DirectoryMenuItem = {
-  displayText: "Home",
-  link: "/",
+  displayText: 'Home',
+  link: '/',
   icon: TiHome,
-  iconColor: "black",
+  iconColor: 'black',
 };
 
 export const defaultMenuState: DirectoryMenuState = {
@@ -29,6 +29,6 @@ export const defaultMenuState: DirectoryMenuState = {
 };
 
 export const directoryMenuState = atom<DirectoryMenuState>({
-  key: "directoryMenuState",
+  key: 'directoryMenuState',
   default: defaultMenuState,
 });

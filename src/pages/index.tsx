@@ -1,15 +1,15 @@
-import { Post, PostVote } from "@/atoms/PostAtom";
-import CreatePostLink from "@/components/Community/CreatePostLink";
-import PersonalHome from "@/components/Community/PersonalHome";
-import PremiumTrial from "@/components/Community/PremiumTrial";
-import Recommendations from "@/components/Community/Recommendations";
-import PageContent from "@/components/Layout/PageContent";
-import PostItem from "@/components/Posts/PostItem";
-import PostLoader from "@/components/Posts/PostLoader";
-import { auth, firestore } from "@/firebase/clientApp";
-import useCommunityData from "@/hooks/useCommunityData";
-import usePosts from "@/hooks/usePosts";
-import { Stack } from "@chakra-ui/react";
+import { Post, PostVote } from '@/atoms/PostAtom';
+import CreatePostLink from '@/components/Community/CreatePostLink';
+import PersonalHome from '@/components/Community/PersonalHome';
+import PremiumTrial from '@/components/Community/PremiumTrial';
+import Recommendations from '@/components/Community/Recommendations';
+import PageContent from '@/components/Layout/PageContent';
+import PostItem from '@/components/Posts/PostItem';
+import PostLoader from '@/components/Posts/PostLoader';
+import { auth, firestore } from '@/firebase/clientApp';
+import useCommunityData from '@/hooks/useCommunityData';
+import usePosts from '@/hooks/usePosts';
+import { Stack } from '@chakra-ui/react';
 import {
   collection,
   getDocs,
@@ -17,10 +17,10 @@ import {
   orderBy,
   query,
   where,
-} from "firebase/firestore";
-import { NextPage } from "next";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+} from 'firebase/firestore';
+import { NextPage } from 'next';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth);
@@ -39,8 +39,8 @@ const Home: NextPage = () => {
     try {
       // fet 10 most popular posts in database
       const postQuery = query(
-        collection(firestore, "posts"),
-        orderBy("voteStatus", "desc"),
+        collection(firestore, 'posts'),
+        orderBy('voteStatus', 'desc'),
         limit(10)
       );
 
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
         posts: posts as Post[],
       }));
     } catch (error) {
-      console.error("Build non auth user home feed error", error);
+      console.error('Build non auth user home feed error', error);
     }
     setLoading(false);
   }, [setPostStateValue]);
@@ -72,8 +72,8 @@ const Home: NextPage = () => {
         );
 
         const postsQuery = query(
-          collection(firestore, "posts"),
-          where("communityId", "in", myCommunitiesIds),
+          collection(firestore, 'posts'),
+          where('communityId', 'in', myCommunitiesIds),
           limit(10)
         );
 
@@ -93,7 +93,7 @@ const Home: NextPage = () => {
         buildNonAuthUserHomeFeed();
       }
     } catch (error) {
-      console.error("build auth user feed error", error);
+      console.error('build auth user feed error', error);
     }
     setLoading(false);
   }, [
@@ -108,7 +108,7 @@ const Home: NextPage = () => {
 
       const postVotesQuery = query(
         collection(firestore, `users/${user?.uid}/postVotes`),
-        where("postId", "in", postIds)
+        where('postId', 'in', postIds)
       );
 
       const postVotesDocs = await getDocs(postVotesQuery);
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
         postVotes: postVotes as PostVote[],
       }));
     } catch (error) {
-      console.error("get user post votes error:", error);
+      console.error('get user post votes error:', error);
     }
   }, [postStateValue.posts, setPostStateValue, user?.uid]);
 

@@ -1,5 +1,5 @@
-import { Button, Flex, Image, Stack } from "@chakra-ui/react";
-import React, { useRef } from "react";
+import { Button, Flex, Image, Stack } from '@chakra-ui/react';
+import React, { useRef } from 'react';
 
 type ImageUploadProps = {
   selectedFile?: string;
@@ -17,7 +17,7 @@ const ImageUpload = ({
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Flex direction={"column"} justify={"center"} align="center" width="100%">
+    <Flex direction={'column'} justify={'center'} align="center" width="100%">
       {selectedFile ? (
         <>
           <Image
@@ -26,14 +26,14 @@ const ImageUpload = ({
             height="z00px"
             alt="Uploaded image"
           />
-          <Stack direction={"row"} mt={4}>
-            <Button height="28px" onClick={() => setSelectedTab("Post")}>
+          <Stack direction={'row'} mt={4}>
+            <Button height="28px" onClick={() => setSelectedTab('Post')}>
               Back to Post
             </Button>
             <Button
-              variant={"outline"}
+              variant={'outline'}
               height="28px"
-              onClick={() => setSelectedFile("")}
+              onClick={() => setSelectedFile('')}
             >
               Remove
             </Button>
@@ -41,16 +41,16 @@ const ImageUpload = ({
         </>
       ) : (
         <Flex
-          justify={"center"}
+          justify={'center'}
           align="center"
           p={20}
           border="1px dashed"
-          borderColor={"gray.200"}
+          borderColor={'gray.200'}
           width="100%"
           borderRadius={4}
         >
           <Button
-            variant={"outline"}
+            variant={'outline'}
             height="28px"
             onClick={() => selectedFileRef.current?.click()}
           >

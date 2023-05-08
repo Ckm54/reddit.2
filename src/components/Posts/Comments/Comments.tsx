@@ -1,5 +1,5 @@
-import { Post, postState } from "@/atoms/PostAtom";
-import { firestore } from "@/firebase/clientApp";
+import { Post, postState } from '@/atoms/PostAtom';
+import { firestore } from '@/firebase/clientApp';
 import {
   Box,
   Flex,
@@ -7,8 +7,8 @@ import {
   SkeletonText,
   Stack,
   Text,
-} from "@chakra-ui/react";
-import { User } from "firebase/auth";
+} from '@chakra-ui/react';
+import { User } from 'firebase/auth';
 import {
   collection,
   doc,
@@ -20,11 +20,11 @@ import {
   Timestamp,
   where,
   writeBatch,
-} from "firebase/firestore";
-import React from "react";
-import { useSetRecoilState } from "recoil";
-import CommentInput from "./CommentInput";
-import CommentItem, { Comment } from "./CommentItem";
+} from 'firebase/firestore';
+import React from 'react';
+import { useSetRecoilState } from 'recoil';
+import CommentInput from './CommentInput';
+import CommentItem, { Comment } from './CommentItem';
 
 type CommentsProps = {
   user: User;
@@ -33,11 +33,11 @@ type CommentsProps = {
 };
 
 const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
-  const [commentText, setCommentText] = React.useState("");
+  const [commentText, setCommentText] = React.useState('');
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [fetchingComments, setFetchingComments] = React.useState(true);
   const [creatingComment, setCreatingComment] = React.useState(false);
-  const [commentDeletedId, setCommentDeletedId] = React.useState("");
+  const [commentDeletedId, setCommentDeletedId] = React.useState('');
   const setPostState = useSetRecoilState(postState);
 
   const onCreateComment = async () => {
@@ -45,12 +45,12 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       const batch = writeBatch(firestore);
       // create a comment document
 
-      const commentDocRef = doc(collection(firestore, "comments"));
+      const commentDocRef = doc(collection(firestore, 'comments'));
 
       const newComment: Comment = {
         id: commentDocRef.id,
         creatorId: user.uid,
-        creatorDisplayText: user.email!.split("@")[0],
+        creatorDisplayText: user.email!.split('@')[0],
         communityId,
         postId: selectedPost?.id!,
         postTitle: selectedPost?.title!,
@@ -63,7 +63,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       newComment.createdAt = { seconds: Date.now() / 1000 } as Timestamp;
 
       // update the post's number of comments
-      const postDocRef = doc(firestore, "posts", selectedPost?.id as string);
+      const postDocRef = doc(firestore, 'posts', selectedPost?.id as string);
 
       batch.update(postDocRef, {
         numberOfComments: increment(1),
@@ -72,7 +72,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       await batch.commit();
 
       // update state to show new comment and number of comments - state
-      setCommentText("");
+      setCommentText('');
       setComments((prev) => [newComment, ...prev]);
       setPostState((prev) => ({
         ...prev,
@@ -82,7 +82,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
         } as Post,
       }));
     } catch (error) {
-      console.error("onCreateComment error", error);
+      console.error('onCreateComment error', error);
     }
     setCreatingComment(false);
   };
@@ -93,11 +93,11 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       // delete a comment document
       const batch = writeBatch(firestore);
 
-      const commentDocRef = doc(firestore, "comments", comment.id);
+      const commentDocRef = doc(firestore, 'comments', comment.id);
       batch.delete(commentDocRef);
 
       // update the post's number of comments
-      const postDocRef = doc(firestore, "posts", selectedPost?.id!);
+      const postDocRef = doc(firestore, 'posts', selectedPost?.id!);
       batch.update(postDocRef, {
         numberOfComments: increment(-1),
       });
@@ -115,18 +115,18 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
 
       setComments((prev) => prev.filter((item) => item.id !== comment.id));
     } catch (error) {
-      console.error("onDeletecommentError", error);
+      console.error('onDeletecommentError', error);
     }
-    setCommentDeletedId("");
+    setCommentDeletedId('');
   };
 
   const getPostComments = React.useCallback(async () => {
     setFetchingComments(true);
     try {
       const commentsQuery = query(
-        collection(firestore, "comments"),
-        where("postId", "==", selectedPost?.id),
-        orderBy("createdAt", "desc")
+        collection(firestore, 'comments'),
+        where('postId', '==', selectedPost?.id),
+        orderBy('createdAt', 'desc')
       );
 
       const commentDocs = await getDocs(commentsQuery);
@@ -138,7 +138,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
 
       setComments(comments as Comment[]);
     } catch (error) {
-      console.error("getPostCommentsError", error);
+      console.error('getPostCommentsError', error);
     }
     setFetchingComments(false);
   }, [selectedPost?.id]);
@@ -149,14 +149,14 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
   }, [getPostComments, selectedPost]);
 
   return (
-    <Box background={"white"} borderRadius="0px 0px 4px 4px" p={2}>
+    <Box background={'white'} borderRadius="0px 0px 4px 4px" p={2}>
       <Flex
-        direction={"column"}
+        direction={'column'}
         pl={10}
         pr={4}
         mb={6}
         fontSize="10pt"
-        width={"100%"}
+        width={'100%'}
       >
         {/* comment input */}
         {!fetchingComments && (
@@ -184,11 +184,11 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
           <>
             {comments.length === 0 ? (
               <Flex
-                direction={"column"}
+                direction={'column'}
                 justify="center"
-                align={"center"}
+                align={'center'}
                 borderTop="1px solid"
-                borderColor={"gray.100"}
+                borderColor={'gray.100'}
                 p={20}
               >
                 <Text fontWeight={700} opacity={0.3}>

@@ -1,8 +1,8 @@
-import { Community } from "@/atoms/communityAtom";
-import { Box, Button, Flex, Icon, Image, Text } from "@chakra-ui/react";
-import React from "react";
-import { FaReddit } from "react-icons/fa";
-import useCommunityData from "@/hooks/useCommunityData";
+import { Community } from '@/atoms/communityAtom';
+import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import React from 'react';
+import { FaReddit } from 'react-icons/fa';
+import useCommunityData from '@/hooks/useCommunityData';
 
 type HeaderProps = {
   communityData: Community;
@@ -17,18 +17,18 @@ const Header = ({ communityData }: HeaderProps) => {
   );
 
   return (
-    <Flex direction={"column"} width="100%" height={"146px"}>
+    <Flex direction={'column'} width="100%" height={'146px'}>
       <Box height="50%" bg="blue.400" />
       <Flex justify="center" bg="white" flexGrow={1}>
-        <Flex width={"95%"} maxWidth="860px">
+        <Flex width={'95%'} maxWidth="860px">
           {communityStateValue.currentCommunity?.imageURL ? (
             <Image
-              borderRadius={"full"}
+              borderRadius={'full'}
               boxSize="66px"
-              position={"relative"}
+              position={'relative'}
               top={-3}
               color="blue.500"
-              border={"4px solid white"}
+              border={'4px solid white'}
               src={communityStateValue.currentCommunity.imageURL}
               alt="community profile image"
             />
@@ -39,13 +39,13 @@ const Header = ({ communityData }: HeaderProps) => {
               position="relative"
               top={-3}
               color="blue.500"
-              border={"4px solid white"}
+              border={'4px solid white'}
               borderRadius="50%"
             />
           )}
 
           <Flex padding="10px 16px">
-            <Flex direction={"column"} mr={6}>
+            <Flex direction={'column'} mr={6}>
               <Text fontWeight={800} fontSize="16pt">
                 {communityData.id}
               </Text>
@@ -54,13 +54,13 @@ const Header = ({ communityData }: HeaderProps) => {
               </Text>
             </Flex>
             <Button
-              variant={isJoined ? "outline" : "solid"}
+              variant={isJoined ? 'outline' : 'solid'}
               height="30px"
               px={6}
               isLoading={loading}
               onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
             >
-              {isJoined ? "Joined" : "Join"}
+              {isJoined ? 'Joined' : 'Join'}
             </Button>
           </Flex>
         </Flex>

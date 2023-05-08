@@ -1,10 +1,10 @@
-import { authModalState } from "@/atoms/authModalAtom";
+import { authModalState } from '@/atoms/authModalAtom';
 import {
   Community,
   CommunitySnippet,
   communityState,
-} from "@/atoms/communityAtom";
-import { auth, firestore } from "@/firebase/clientApp";
+} from '@/atoms/communityAtom';
+import { auth, firestore } from '@/firebase/clientApp';
 import {
   collection,
   doc,
@@ -12,11 +12,11 @@ import {
   getDocs,
   increment,
   writeBatch,
-} from "firebase/firestore";
-import { useRouter } from "next/router";
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilState, useSetRecoilState } from "recoil";
+} from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 const useCommunityData = () => {
   const [user] = useAuthState(auth);
@@ -24,7 +24,7 @@ const useCommunityData = () => {
     useRecoilState(communityState);
   const setAuthModalState = useSetRecoilState(authModalState);
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState('');
   const router = useRouter();
 
   const onJoinOrLeaveCommunity = (
@@ -35,7 +35,7 @@ const useCommunityData = () => {
     // if not open auth modal
     if (!user) {
       // open login modal
-      setAuthModalState({ open: true, view: "login" });
+      setAuthModalState({ open: true, view: 'login' });
       return;
     }
 
@@ -63,7 +63,7 @@ const useCommunityData = () => {
         snippetsFetched: true,
       }));
     } catch (error: any) {
-      console.log("get snippets error", error);
+      console.log('get snippets error', error);
       setError(error.message);
     }
 
@@ -80,7 +80,7 @@ const useCommunityData = () => {
 
       const newSnippet: CommunitySnippet = {
         communityId: communityData.id,
-        imageURL: communityData.imageURL || "",
+        imageURL: communityData.imageURL || '',
         isModerator: user?.uid === communityData.creatorId,
       };
 
@@ -93,7 +93,7 @@ const useCommunityData = () => {
         newSnippet
       );
 
-      batch.update(doc(firestore, "communities", communityData.id), {
+      batch.update(doc(firestore, 'communities', communityData.id), {
         numberOfMembers: increment(1),
       });
 
@@ -105,7 +105,7 @@ const useCommunityData = () => {
         mySnippets: [...prev.mySnippets, newSnippet],
       }));
     } catch (error: any) {
-      console.log("Join community error", error);
+      console.log('Join community error', error);
       setError(error.message);
     }
 
@@ -124,7 +124,7 @@ const useCommunityData = () => {
         doc(firestore, `users/${user?.uid}/communitySnippets`, communityId)
       );
 
-      batch.update(doc(firestore, "communities", communityId), {
+      batch.update(doc(firestore, 'communities', communityId), {
         numberOfMembers: increment(-1),
       });
 
@@ -138,7 +138,7 @@ const useCommunityData = () => {
         ),
       }));
     } catch (error: any) {
-      console.log("leave community error", error);
+      console.log('leave community error', error);
       setError(error.message);
     }
 
@@ -148,7 +148,7 @@ const useCommunityData = () => {
   const getCommunityData = React.useCallback(
     async (communityId: string) => {
       try {
-        const communityDocRef = doc(firestore, "communities", communityId);
+        const communityDocRef = doc(firestore, 'communities', communityId);
 
         const communityDoc = await getDoc(communityDocRef);
 
@@ -160,7 +160,7 @@ const useCommunityData = () => {
           } as Community,
         }));
       } catch (error) {
-        console.error("Get Community data", error);
+        console.error('Get Community data', error);
       }
     },
     [setCommunityStateValue]
