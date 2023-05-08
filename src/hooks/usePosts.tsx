@@ -191,30 +191,33 @@ const usePosts = () => {
     }
   };
 
-  const getCommunityPostVotes = async (communityId: string) => {
-    const postVotesQuery = query(
-      collection(firestore, "users", `${user?.uid}/postVotes`),
-      where("communityId", "==", communityId)
-    );
+  const getCommunityPostVotes = React.useCallback(
+    async (communityId: string) => {
+      const postVotesQuery = query(
+        collection(firestore, "users", `${user?.uid}/postVotes`),
+        where("communityId", "==", communityId)
+      );
 
-    const postVoteDocs = await getDocs(postVotesQuery);
+      const postVoteDocs = await getDocs(postVotesQuery);
 
-    const postVotes = postVoteDocs.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+      const postVotes = postVoteDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    setPostStateValue((prev) => ({
-      ...prev,
-      postVotes: postVotes as PostVote[],
-    }));
-  };
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postVotes as PostVote[],
+      }));
+    },
+    [setPostStateValue, user?.uid]
+  );
 
   React.useEffect(() => {
     if (!user || !currentCommunity?.id) return;
 
     getCommunityPostVotes(currentCommunity.id);
-  }, [currentCommunity, user]);
+  }, [currentCommunity, getCommunityPostVotes, user]);
 
   React.useEffect(() => {
     if (!user) {
@@ -224,7 +227,7 @@ const usePosts = () => {
         postVotes: [],
       }));
     }
-  }, [user]);
+  }, [setPostStateValue, user]);
 
   return {
     postStateValue,
