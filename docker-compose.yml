@@ -1,14 +1,22 @@
 version: "3.8"
 services:
   web:
-    user: root
-    build:
-      context: "./"
-      target: runner
-    volumes:
-      - .:/reddit-clone
-    command: npm run dev
+    image: docker-redditclone-dev
+    build: .
     ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
+      - 3000:3000
+    volumes:
+      - ./functions:/app/funtions
+      - ./public:app/public
+      - ./src:app/src
+    # user: root
+    # build:
+    #   context: "./"
+    #   target: runner
+    # volumes:
+    #   - .:/reddit-clone
+    # command: yarn dev
+    # ports:
+    #   - "3000:3000"
+    # environment:
+    #   NODE_ENV: development
