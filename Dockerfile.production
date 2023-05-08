@@ -1,0 +1,42 @@
+FROM node:18-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /reddit-clone
+
+COPY package.json package-lock.json ./
+
+RUN npm install --production
+
+# COPY next.config.js ./next.config.js
+# COPY functions ./functions
+# COPY public ./public
+# COPY src ./src
+
+FROM node:18-alpine AS builder
+WORKDIR /reddit-clone
+COPY --from=deps /reddit-clone/node_modules ./node_modules
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /reddit-clone
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 redditor
+
+# COPY --from=builder redditor:nodejs /reddit-clone/.next ./.next
+COPY --from=builder /reddit-clone/node_modules ./node_modules
+COPY --from=builder /reddit-clone/package.json ./package.json
+
+USER redditor
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["npm", "start"]
