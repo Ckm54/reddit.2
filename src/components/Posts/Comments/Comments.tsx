@@ -120,7 +120,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
     setCommentDeletedId("");
   };
 
-  const getPostComments = async () => {
+  const getPostComments = React.useCallback(async () => {
     setFetchingComments(true);
     try {
       const commentsQuery = query(
@@ -137,17 +137,16 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       }));
 
       setComments(comments as Comment[]);
-      
     } catch (error) {
       console.error("getPostCommentsError", error);
     }
     setFetchingComments(false);
-  };
+  }, [selectedPost?.id]);
 
   React.useEffect(() => {
     if (!selectedPost) return;
     getPostComments();
-  }, [selectedPost]);
+  }, [getPostComments, selectedPost]);
 
   return (
     <Box background={"white"} borderRadius="0px 0px 4px 4px" p={2}>

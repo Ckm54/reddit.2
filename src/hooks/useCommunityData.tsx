@@ -47,7 +47,7 @@ const useCommunityData = () => {
     joinCommunity(communityData);
   };
 
-  const getMysnippets = async () => {
+  const getMysnippets = React.useCallback(async () => {
     setLoading(true);
     try {
       // get user snippets
@@ -68,7 +68,7 @@ const useCommunityData = () => {
     }
 
     setLoading(false);
-  };
+  }, [setCommunityStateValue, user?.uid]);
 
   const joinCommunity = async (communityData: Community) => {
     // creating a new community snippet for this user
@@ -145,23 +145,26 @@ const useCommunityData = () => {
     setLoading(false);
   };
 
-  const getCommunityData = async (communityId: string) => {
-    try {
-      const communityDocRef = doc(firestore, "communities", communityId);
+  const getCommunityData = React.useCallback(
+    async (communityId: string) => {
+      try {
+        const communityDocRef = doc(firestore, "communities", communityId);
 
-      const communityDoc = await getDoc(communityDocRef);
+        const communityDoc = await getDoc(communityDocRef);
 
-      setCommunityStateValue((prev) => ({
-        ...prev,
-        currentCommunity: {
-          id: communityDoc.id,
-          ...communityDoc.data(),
-        } as Community,
-      }));
-    } catch (error) {
-      console.error("Get Community data", error);
-    }
-  };
+        setCommunityStateValue((prev) => ({
+          ...prev,
+          currentCommunity: {
+            id: communityDoc.id,
+            ...communityDoc.data(),
+          } as Community,
+        }));
+      } catch (error) {
+        console.error("Get Community data", error);
+      }
+    },
+    [setCommunityStateValue]
+  );
 
   React.useEffect(() => {
     if (!user) {
@@ -173,7 +176,7 @@ const useCommunityData = () => {
       return;
     }
     getMysnippets();
-  }, [user]);
+  }, [getMysnippets, setCommunityStateValue, user]);
 
   React.useEffect(() => {
     const { communityId } = router.query;
@@ -181,7 +184,7 @@ const useCommunityData = () => {
     if (communityId && !communityStateValue.currentCommunity) {
       getCommunityData(communityId as string);
     }
-  }, [router.query, communityStateValue.currentCommunity]);
+  }, [router.query, communityStateValue.currentCommunity, getCommunityData]);
 
   return {
     // data and functions

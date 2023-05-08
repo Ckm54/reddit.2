@@ -21,16 +21,16 @@ const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
   const [user, loading, error] = useAuthState(auth);
 
-  const handleClose = () => {
+  const handleClose = React.useCallback(() => {
     setModalState((prev) => ({
       ...prev,
       open: false,
     }));
-  };
+  }, [setModalState]);
 
   React.useEffect(() => {
     if (user) handleClose();
-  }, [user]);
+  }, [handleClose, user]);
 
   return (
     <>
