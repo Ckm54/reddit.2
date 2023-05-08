@@ -4,6 +4,8 @@ import useDirectory from "@/hooks/useDirectory";
 import { Flex, Image } from "@chakra-ui/react";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { IconBaseProps } from "react-icons";
+import { TiHome } from "react-icons/ti";
 import Directory from "./Directory/Directory";
 import RightContent from "./RightContent/RightContent";
 import SearchInput from "./SearchInput";
@@ -23,7 +25,14 @@ const Navbar = () => {
         align={"center"}
         width={{ base: "40px", md: "auto" }}
         mr={{ base: "0", md: "2" }}
-        onClick={() => onSelectMenuItem(defaultMenuItem)}
+        onClick={() =>
+          onSelectMenuItem({
+            displayText: "Home",
+            link: "/",
+            icon: TiHome,
+            iconColor: "black",
+          })
+        }
         cursor="pointer"
       >
         <Image src="/images/redditFace.svg" alt="logo image" height={"30px"} />
